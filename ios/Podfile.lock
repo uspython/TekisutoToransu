@@ -1119,6 +1119,8 @@ PODS:
     - React-Core
   - RNDeviceInfo (10.12.0):
     - React-Core
+  - RNIap (12.12.2):
+    - React-Core
   - RNKeychain (8.1.2):
     - React-Core
   - RNLocalize (3.0.6):
@@ -1213,6 +1215,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNIap (from `../node_modules/react-native-iap`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -1340,6 +1343,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNIap:
+    :path: "../node_modules/react-native-iap"
   RNKeychain:
     :path: "../node_modules/react-native-keychain"
   RNLocalize:
@@ -1417,6 +1422,7 @@ SPEC CHECKSUMS:
   ReactCommon: 45b5d4f784e869c44a6f5a8fad5b114ca8f78c53
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
   RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
+  RNIap: 123a98c6187f09ce0ed5897569abf01d9db416b0
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNLocalize: 4222a3756cdbe2dc9a5bdf445765a4d2572107cb
   RNPermissions: 9464704867e58dae11149139b6995d733d3d513f
