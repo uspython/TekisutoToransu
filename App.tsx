@@ -26,7 +26,11 @@ function App(): React.JSX.Element {
           />
         </Stack.Group>
         <Stack.Group screenOptions={{presentation: 'fullScreenModal'}}>
-          <Stack.Screen name="CameraPage" component={CameraPage} />
+          <Stack.Screen
+            name="CameraPage"
+            component={CameraPage}
+            options={{headerShown: false}}
+          />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
