@@ -35,6 +35,10 @@
 	<string>$(PRODUCT_NAME) needs access to your Camera.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs add Photo to your CameraRoll.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your CameraRoll.</string>
 	<key>RCTAsyncStorageExcludeFromBackup</key>
 	<false/>
 	<key>UIAppFonts</key>
