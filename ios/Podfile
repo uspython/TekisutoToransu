@@ -67,6 +67,10 @@ target 'JTextTrans' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+  
+  pod 'GoogleMobileAdsMediationAppLovin'
+  pod 'GoogleMobileAdsMediationChartboost'
+  pod 'GoogleMobileAdsMediationUnity'
 
   target 'JTextTransTests' do
     inherit! :complete

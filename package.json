@@ -22,6 +22,7 @@
     "react-native-aes-crypto": "^3.0.1",
     "react-native-device-info": "^10.12.0",
     "react-native-dotenv": "^3.4.9",
+    "react-native-google-mobile-ads": "^12.10.0",
     "react-native-iap": "^12.12.2",
     "react-native-keychain": "^8.1.2",
     "react-native-localize": "^3.0.6",

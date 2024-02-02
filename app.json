@@ -1,4 +1,7 @@
 {
   "name": "JTextTrans",
-  "displayName": "JTextTrans"
+  "displayName": "JTextTrans",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "com.jtexttrans.android"
+  }
 }

@@ -51,6 +51,16 @@ react {
     // hermesFlags = ["-O", "-output-source-map"]
 }
 
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url 'https://cboost.jfrog.io/artifactory/chartboost-ads/'
+        }
+    }
+}
+
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
  */
@@ -115,6 +125,11 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    implementation  'com.google.ads.mediation:applovin:12.1.0.0'
+    implementation  'com.google.ads.mediation:chartboost:9.6.1.0'
+    implementation  'com.unity3d.ads:unity-ads:4.9.2'
+    implementation  'com.google.ads.mediation:unity:4.9.2.0'
 }
 
 project.ext.vectoricons = [
