@@ -1,4 +1,4 @@
-package com.jtexttrans
+package com.spacerayapp
 
 import android.os.Bundle
 import android.os.PersistableBundle

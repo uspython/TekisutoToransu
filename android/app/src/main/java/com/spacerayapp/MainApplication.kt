@@ -1,4 +1,4 @@
-package com.jtexttrans
+package com.spacerayapp
 
 import android.app.Application
 import com.facebook.react.PackageList

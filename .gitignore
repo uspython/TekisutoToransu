@@ -1,3 +1,6 @@
+GoogleService-Info.plist
+app.json
+
 # OSX
 #
 .DS_Store
@@ -225,3 +228,4 @@ vendor/
 # CircleCI
 .circleci/generated_config.yml
 .circleci/storage
+

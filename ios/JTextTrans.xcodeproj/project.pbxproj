@@ -12,6 +12,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		5FB072FE2B6DE9A6006F1051 /* PlaceHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB072FD2B6DE9A6006F1051 /* PlaceHolder.swift */; };
+		5FB072FF2B6DE9A6006F1051 /* PlaceHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB072FD2B6DE9A6006F1051 /* PlaceHolder.swift */; };
+		5FB073012B6DED37006F1051 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5FB073002B6DED37006F1051 /* GoogleService-Info.plist */; };
+		5FB073022B6DED37006F1051 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5FB073002B6DED37006F1051 /* GoogleService-Info.plist */; };
 		5FC727582B63AEF500EC0F58 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FC727572B63AEF500EC0F58 /* MaterialIcons.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-JTextTrans-JTextTransTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-JTextTrans-JTextTransTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -42,6 +46,10 @@
 		5709B34CF0A7D63546082F79 /* Pods-JTextTrans.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JTextTrans.release.xcconfig"; path = "Target Support Files/Pods-JTextTrans/Pods-JTextTrans.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-JTextTrans-JTextTransTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JTextTrans-JTextTransTests.debug.xcconfig"; path = "Target Support Files/Pods-JTextTrans-JTextTransTests/Pods-JTextTrans-JTextTransTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-JTextTrans.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JTextTrans.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FB072FB2B6DE9A6006F1051 /* JTextTrans-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JTextTrans-Bridging-Header.h"; sourceTree = "<group>"; };
+		5FB072FC2B6DE9A6006F1051 /* JTextTransTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JTextTransTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		5FB072FD2B6DE9A6006F1051 /* PlaceHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHolder.swift; sourceTree = "<group>"; };
+		5FB073002B6DED37006F1051 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5FC727572B63AEF500EC0F58 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = JTextTrans/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-JTextTrans-JTextTransTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JTextTrans-JTextTransTests.release.xcconfig"; path = "Target Support Files/Pods-JTextTrans-JTextTransTests/Pods-JTextTrans-JTextTransTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -95,6 +103,10 @@
 				5FC727572B63AEF500EC0F58 /* MaterialIcons.ttf */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				5FB072FD2B6DE9A6006F1051 /* PlaceHolder.swift */,
+				5FB073002B6DED37006F1051 /* GoogleService-Info.plist */,
+				5FB072FB2B6DE9A6006F1051 /* JTextTrans-Bridging-Header.h */,
+				5FB072FC2B6DE9A6006F1051 /* JTextTransTests-Bridging-Header.h */,
 			);
 			name = JTextTrans;
 			sourceTree = "<group>";
@@ -207,10 +219,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						LastSwiftMigration = 1520;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1520;
 					};
 				};
 			};
@@ -238,6 +251,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FB073022B6DED37006F1051 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				5FB073012B6DED37006F1051 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				5FC727582B63AEF500EC0F58 /* MaterialIcons.ttf in Resources */,
 			);
@@ -403,6 +418,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* JTextTransTests.m in Sources */,
+				5FB072FF2B6DE9A6006F1051 /* PlaceHolder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +428,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				5FB072FE2B6DE9A6006F1051 /* PlaceHolder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,7 +447,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-JTextTrans-JTextTransTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -449,6 +468,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "JTextTransTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JTextTrans.app/JTextTrans";
 			};
 			name = Debug;
@@ -457,7 +479,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-JTextTrans-JTextTransTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = JTextTransTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
@@ -473,6 +497,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "JTextTransTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JTextTrans.app/JTextTrans";
 			};
 			name = Release;
@@ -501,6 +527,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.spacerayapp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = JTextTrans;
+				SWIFT_OBJC_BRIDGING_HEADER = "JTextTrans-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -530,6 +557,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.spacerayapp.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = JTextTrans;
+				SWIFT_OBJC_BRIDGING_HEADER = "JTextTrans-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
