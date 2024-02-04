@@ -22,6 +22,14 @@ const PermissionKeys = () => {
       PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
       PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
     ];
+  } else if (
+    Platform.OS === 'android' &&
+    RNDeviceInfo.getApiLevelSync() >= 33
+  ) {
+    return [
+      PERMISSIONS.ANDROID.READ_MEDIA_VIDEO,
+      PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+    ];
   } else {
     return [PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE];
   }

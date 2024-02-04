@@ -4,9 +4,10 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "component": ["src/Components"],
-      "model": ["src/model"],
-      "res": ["src/res"],
+      "component": ["./src/Components"],
+      "model": ["./src/model"],
+      "res": ["./src/res"],
+      "typeRoots": ["./src/types"],
     }
   }
 }

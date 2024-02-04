@@ -8,7 +8,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import React, {PropsWithChildren} from 'react';
+import React, {PropsWithChildren, useEffect} from 'react';
 import {
   Colors,
   Header,
@@ -16,6 +16,8 @@ import {
   DebugInstructions,
   LearnMoreLinks,
 } from 'react-native/Libraries/NewAppScreen';
+import * as PermissionHelper from '../model/permission-helper';
+import mobileAds, {MaxAdContentRating} from 'react-native-google-mobile-ads';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -54,6 +56,23 @@ export default function HomePage(props: {navigation: any}) {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  useEffect(() => {
+    async function checkATTPermission() {
+      await PermissionHelper.checkATTPermission();
+      await mobileAds().setRequestConfiguration({
+        maxAdContentRating: MaxAdContentRating.G,
+        tagForChildDirectedTreatment: false,
+        tagForUnderAgeOfConsent: false,
+      });
+      await mobileAds().initialize();
+      // Initialize the Ads SDK successfully.
+      console.log('Ads SDK initialized successfully.');
+    }
+
+    checkATTPermission();
+  }, []);
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
