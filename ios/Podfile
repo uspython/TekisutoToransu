@@ -57,6 +57,16 @@ end
 target 'JTextTrans' do
   config = use_native_modules!
   
+  # React Native Fireabse App WordAround.
+  pod 'nanopb', :modular_headers => true
+  pod 'FirebaseCoreExtension', :modular_headers => true
+  pod 'FirebaseInstallations', :modular_headers => true
+  pod 'GoogleDataTransport', :modular_headers => true
+  pod 'FirebaseSessions', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  
+  # Admob Mediation
   pod 'GoogleMobileAdsMediationAppLovin'
   pod 'GoogleMobileAdsMediationChartboost'
   pod 'GoogleMobileAdsMediationUnity'
