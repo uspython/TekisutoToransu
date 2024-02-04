@@ -229,3 +229,4 @@ vendor/
 .circleci/generated_config.yml
 .circleci/storage
 
+ios/JTextTrans/Info.plist
