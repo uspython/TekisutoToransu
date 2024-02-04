@@ -230,3 +230,4 @@ vendor/
 .circleci/storage
 
 ios/JTextTrans/Info.plist
+android/app/src/main/AndroidManifest.xml
