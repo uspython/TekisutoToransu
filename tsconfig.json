@@ -1,13 +1,14 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
+    "strict": false,
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "component": ["./src/Components"],
-      "model": ["./src/model"],
-      "res": ["./src/res"],
-      "typeRoots": ["./src/types"],
+      "component": ["src/component"],
+      "model": ["src/model"],
+      "res": ["src/res"],
+      "typeRoots": ["src/types"],
     }
   }
 }

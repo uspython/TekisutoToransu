@@ -14,6 +14,21 @@ import {I18n, I18nLangKey} from 'res';
 
 import {PreferenceKey} from './preference-keys';
 
+const PermissionGalleryWriteKeys = () => {
+  if (Platform.OS === 'ios') {
+    return [PERMISSIONS.IOS.PHOTO_LIBRARY_WRITE];
+  } else if (Platform.OS === 'android' && RNDeviceInfo.getApiLevelSync() < 29) {
+    return PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE;
+  } else if (
+    Platform.OS === 'android' &&
+    RNDeviceInfo.getApiLevelSync() >= 33
+  ) {
+    return PERMISSIONS.ANDROID.READ_MEDIA_IMAGES;
+  } else {
+    return [PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE];
+  }
+}
+
 const PermissionKeys = () => {
   if (Platform.OS === 'ios') {
     return [PERMISSIONS.IOS.PHOTO_LIBRARY];
