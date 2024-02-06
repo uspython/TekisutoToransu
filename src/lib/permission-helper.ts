@@ -14,20 +14,20 @@ import {I18n, I18nLangKey} from 'res';
 
 import {PreferenceKey} from './preference-keys';
 
-const PermissionGalleryWriteKeys = () => {
+const PermissionKeysWrite = () => {
   if (Platform.OS === 'ios') {
-    return [PERMISSIONS.IOS.PHOTO_LIBRARY_WRITE];
+    return [PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY];
   } else if (Platform.OS === 'android' && RNDeviceInfo.getApiLevelSync() < 29) {
-    return PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE;
+    return [PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE];
   } else if (
     Platform.OS === 'android' &&
     RNDeviceInfo.getApiLevelSync() >= 33
   ) {
-    return PERMISSIONS.ANDROID.READ_MEDIA_IMAGES;
+    return [PERMISSIONS.ANDROID.READ_MEDIA_IMAGES];
   } else {
     return [PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE];
   }
-}
+};
 
 const PermissionKeys = () => {
   if (Platform.OS === 'ios') {
@@ -50,7 +50,26 @@ const PermissionKeys = () => {
   }
 };
 
-export async function requestPermission(callback: () => void): Promise<void> {
+export async function requestWritePermission(
+  callback: () => void,
+): Promise<void> {
+  const keys = PermissionKeysWrite();
+  const statuses = await requestMultiple(keys);
+
+  console.warn('[permission helper] request write permissions', statuses);
+
+  const isValid = keys
+    .map(key => statuses[key] === RESULTS.GRANTED)
+    .reduce((p, c) => p && c, true);
+
+  if (isValid) {
+    callback && callback();
+  }
+}
+
+export async function requestGalleryPermission(
+  callback: () => void,
+): Promise<void> {
   const statuses = await requestMultiple(PermissionKeys());
 
   console.warn('[permission helper] request permissions', statuses);
@@ -90,16 +109,79 @@ export async function checkPermission(): Promise<string> {
   }
 }
 
-export async function checkWithRequestPermission(callback: () => void) {
+export async function checkPermissionWrite(): Promise<string> {
+  const keys = PermissionKeysWrite();
+  const statuses = await checkMultiple(keys);
+
+  console.warn('[permission helper] check permissions', statuses);
+
+  //@ts-ignore
+  const results = keys.map(key => statuses[key] === RESULTS.GRANTED);
+  const isValid = results.reduce((p, c) => p && c, true);
+
+  console.warn('[permission helper] isValid', isValid);
+
+  if (isValid) {
+    return RESULTS.GRANTED;
+  } else {
+    const results = keys.map(key => statuses[key] === RESULTS.BLOCKED);
+    const isBlocked = results.find(v => !!v);
+
+    return isBlocked ? RESULTS.BLOCKED : RESULTS.DENIED;
+  }
+}
+
+export async function checkWithRequestPermissionWrite(
+  callback: () => Promise<void>,
+) {
+  const status = await checkPermissionWrite();
+
+  switch (status) {
+    case RESULTS.DENIED: {
+      requestWritePermission(callback);
+      break;
+    }
+    case RESULTS.GRANTED: {
+      callback && (await callback());
+      break;
+    }
+
+    case RESULTS.UNAVAILABLE: {
+      console.warn('[permission helper] unavailable');
+      break;
+    }
+    case RESULTS.BLOCKED:
+    default: {
+      Alert.alert(
+        I18n.t(I18nLangKey.alert_permission_deny_title),
+        I18n.t(I18nLangKey.alert_permission_deny_msg),
+        [
+          {text: I18n.t(I18nLangKey.alert_btn_cancel)},
+          {
+            text: I18n.t(I18nLangKey.alert_permission_btn_go),
+            onPress: () => {
+              Linking.openSettings();
+            },
+          },
+        ],
+      );
+      break;
+    }
+  }
+}
+
+export async function checkWithRequestPermissionAll(
+  callback: () => Promise<void>,
+) {
   const status = await checkPermission();
 
   switch (status) {
     case RESULTS.DENIED: {
-      requestPermission(callback);
+      requestGalleryPermission(callback);
       break;
     }
     case RESULTS.GRANTED: {
-      callback && callback();
+      callback && (await callback());
       break;
     }
 
@@ -269,3 +351,17 @@ export async function checkATTPermission() {
 
   return result;
 }
+
+const PermissionHelper = {
+  checkATTPermission,
+  alertATTPermission,
+  checkWithRequestPermissionAll,
+  checkWithRequestPermissionWrite,
+  requestATTPermission,
+  requestWritePermission,
+  requestGalleryPermission,
+  checkPermission,
+  checkPermissionWrite,
+};
+
+export default PermissionHelper;

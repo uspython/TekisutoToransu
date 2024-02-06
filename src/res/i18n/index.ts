@@ -9,9 +9,8 @@ I18n.translations = {
   en,
   zh,
   ja,
-  br: pt,
 };
-const [{ languageCode }] = (RNLocalize.getLocales() || [{ languageCode: 'en' }]);
+const [{languageCode}] = RNLocalize.getLocales() || [{languageCode: 'en'}];
 
 I18n.locale = languageCode;
 export default I18n;

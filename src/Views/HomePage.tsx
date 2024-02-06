@@ -8,7 +8,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import React, {PropsWithChildren, useEffect} from 'react';
+import React, {type PropsWithChildren, useEffect} from 'react';
 import {
   Colors,
   Header,
@@ -16,8 +16,8 @@ import {
   DebugInstructions,
   LearnMoreLinks,
 } from 'react-native/Libraries/NewAppScreen';
-import * as PermissionHelper from '../model/permission-helper';
 import mobileAds, {MaxAdContentRating} from 'react-native-google-mobile-ads';
+import {PermissionHelper} from 'lib';
 
 type SectionProps = PropsWithChildren<{
   title: string;

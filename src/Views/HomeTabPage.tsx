@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import SettingsPage from './SettingsPage';
 import HomePage from './HomePage';
 import Icons from 'react-native-vector-icons/MaterialIcons';
-import {RouteProp, ParamListBase} from '@react-navigation/native';
+import type {RouteProp, ParamListBase} from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 

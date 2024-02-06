@@ -3,7 +3,6 @@ import {useAppState} from '@react-native-community/hooks';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
-  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -11,46 +10,22 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
-import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 import {
   Camera,
   useCameraDevice,
   useCameraPermission,
 } from 'react-native-vision-camera';
+import {PermissionHelper} from 'lib';
 
-const SavePhoto = async ({photoData}) => {
-  const checkAndSavePhoto = async () => {
-    let status;
-
-    // Checking and requesting permissions based on platform and OS version
-    if (Platform.OS === 'ios') {
-      // Assuming you want add-only access for iOS
-      status = await check(PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY);
-    } else {
-      // Differentiating between Android versions
-      const permission =
-        Number(Platform.Version) >= 33
-          ? PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
-          : PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE;
-      status = await check(permission);
-      if (status !== RESULTS.GRANTED) {
-        status = await request(permission);
-      }
+const SavePhoto = async ({photoTag}) => {
+  await PermissionHelper.checkWithRequestPermissionWrite(async () => {
+    try {
+      const i = await CameraRoll.saveToCameraRoll(photoTag);
+      console.warn('saved photo i:' + i);
+    } catch (error) {
+      console.error('Error saving photo:', error);
     }
-
-    // If permission is granted, save the photo
-    if (status === RESULTS.GRANTED) {
-      try {
-        await CameraRoll.saveToCameraRoll;
-      } catch (error) {
-        console.error('Error saving photo:', error);
-      }
-    } else {
-      console.error('Error saving photo: No Permissions Granted');
-    }
-  };
-
-  await checkAndSavePhoto();
+  });
 };
 
 export default function CameraPage(props: {navigation: any}) {
@@ -78,6 +53,11 @@ export default function CameraPage(props: {navigation: any}) {
       flash: 'off',
       enableShutterSound: false,
     });
+    if (photo) {
+      await SavePhoto({photoTag: photo});
+    } else {
+      console.error('No photo taken');
+    }
   }, []);
 
   const renderGrid = () => {

@@ -1,7 +1,7 @@
 'use strict';
 
 interface Ctor {
-  new(): any;
+  new (): any;
 }
 
 export class ManagerBuilder {
