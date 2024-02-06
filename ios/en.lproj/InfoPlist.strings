@@ -1,0 +1,12 @@
+/* 
+  InfoPlist.strings
+  JTextTrans
+
+  Created by JeffZhao on 2024/02/06.
+  
+*/
+/* English */
+"NSUserTrackingUsageDescription" = "This app requires user tracking permission to provide personalized advertisements.";
+"NSCameraUsageDescription" = "This app requires access to the camera to take photos and videos.";
+"NSPhotoLibraryAddUsageDescription" = "This app requires permission to add photos to your photo library.";
+"NSPhotoLibraryUsageDescription" = "This app requires access to your photo library to select photos and videos.";

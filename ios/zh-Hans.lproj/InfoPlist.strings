@@ -1,0 +1,12 @@
+/* 
+  InfoPlist.strings
+  JTextTrans
+
+  Created by JeffZhao on 2024/02/06.
+  
+*/
+/* Simplified Chinese */
+"NSUserTrackingUsageDescription" = "此应用需要用户跟踪权限以提供个性化广告。";
+"NSCameraUsageDescription" = "此应用需要访问您的摄像头以拍摄照片和视频。";
+"NSPhotoLibraryAddUsageDescription" = "此应用需要权限将照片添加到您的相册中。";
+"NSPhotoLibraryUsageDescription" = "此应用需要访问您的相册以选择照片和视频。";

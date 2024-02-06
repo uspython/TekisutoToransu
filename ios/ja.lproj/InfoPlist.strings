@@ -1,0 +1,12 @@
+/* 
+  InfoPlist.strings
+  JTextTrans
+
+  Created by JeffZhao on 2024/02/06.
+  
+*/
+/* Japanese */
+"NSUserTrackingUsageDescription" = "このアプリは、パーソナライズされた広告を提供するためにユーザーの追跡許可が必要です。";
+"NSCameraUsageDescription" = "このアプリは、写真やビデオを撮るためにカメラへのアクセスが必要です。";
+"NSPhotoLibraryAddUsageDescription" = "このアプリは、写真をあなたのフォトライブラリに追加するための許可が必要です。";
+"NSPhotoLibraryUsageDescription" = "このアプリは、写真やビデオを選択するためにあなたのフォトライブラリへのアクセスが必要です。";
