@@ -1,5 +1,3 @@
-'use strict';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class SimpleStorage {
@@ -47,7 +45,7 @@ class SimpleStorage {
     await AsyncStorage.setItem(key, value);
   }
 
-  static async saveForNow(key: string, value: string) {
+  static saveForNow(key: string, value: string) {
     SimpleStorage._snapCache.set(key, value);
   }
 

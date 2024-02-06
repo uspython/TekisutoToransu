@@ -234,7 +234,7 @@ export async function checkWithRequestPermissionAll(
 // }
 
 export function requestATTPermission(
-  onAuthorized?: () => void,
+  onCompleted?: () => void,
   onError?: (reason: any) => void,
 ): void {
   check(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY).then(result => {
@@ -251,27 +251,21 @@ export function requestATTPermission(
             // });
             if (result === RESULTS.GRANTED) {
               //logger.event(`appTracking${PermissionName(result)}`);
-              onAuthorized && onAuthorized();
+              onCompleted && onCompleted();
             }
           })
           .catch(reason => {
             console.warn('[permission helper] tracking error ', reason);
+            onCompleted && onCompleted();
             onError && onError(reason);
           });
         break;
       }
 
-      case RESULTS.BLOCKED: {
-        //PERMISSION Switch-Off on purpose, Request Permissions is Helpless
-        break;
-      }
-
-      case RESULTS.GRANTED: {
-        // Authorized
-        break;
-      }
-
+      case RESULTS.BLOCKED: //PERMISSION Switch-Off on purpose, Request Permissions is Helpless
+      case RESULTS.GRANTED: // Authorized
       default: {
+        onCompleted && onCompleted();
         break;
       }
     }

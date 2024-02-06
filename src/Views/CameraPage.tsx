@@ -15,7 +15,9 @@ import {
   useCameraDevice,
   useCameraPermission,
 } from 'react-native-vision-camera';
-import {PermissionHelper} from 'lib';
+import {PermissionHelper, PreferenceKey, SimpleStorage} from 'lib';
+import { useFirstLaunch } from 'hook';
+import { InitAds } from 'utilities';
 
 const SavePhoto = async ({photoTag}) => {
   await PermissionHelper.checkWithRequestPermissionWrite(async () => {
@@ -31,6 +33,7 @@ const SavePhoto = async ({photoTag}) => {
 export default function CameraPage(props: {navigation: any}) {
   const {navigation} = props;
 
+  const isFirstLaunch = useFirstLaunch();
   const camera = useRef<Camera>(null);
   const [showGrid, setShowGrid] = useState(false);
 
@@ -97,19 +100,42 @@ export default function CameraPage(props: {navigation: any}) {
     return () => {};
   }, [requestPermission]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+      // Launch at the first time
+      // Show ATT When Close
+      const countStr = SimpleStorage.getSync(PreferenceKey.APP_LAUNCH_COUNT);
+      const count = countStr? parseInt(countStr, 10) : 0;
+      if(count <= 1) {
+        InitAds().then(() => {
+          console.log('Ads initialized from Camera Page');
+        });
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, isFirstLaunch]);
+
   if (device == null || !hasPermission) {
-    return <Text>No Camera</Text>;
+    return <View style={{flex: 1,flexDirection: 'column',justifyContent: 'center',alignItems: 'center'}}>
+<Text>No Camera</Text>
+<TouchableOpacity
+    style={styles.button}
+    onPress={() => navigation.goBack()}>
+    <Text>Back</Text>
+  </TouchableOpacity>
+    </View>;
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Camera
+      {/* <Camera
         ref={camera}
         style={StyleSheet.absoluteFill}
         device={device}
         isActive={isActive}
         photo={true}
-      />
+      /> */}
       {renderGrid()}
       {/* Top Buttons */}
       <View style={styles.topButtonContainer}>
@@ -168,7 +194,7 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
-    backgroundColor: 'white',
+    backgroundColor: 'red',
     borderRadius: 5,
   },
   gridContainer: {

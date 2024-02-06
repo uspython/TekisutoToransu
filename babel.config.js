@@ -21,9 +21,11 @@ module.exports = {
       {
         alias: {
           res: './src/res',
-          //model: './src/model',
+          model: './src/model',
           component: './src/component',
           lib: './src/lib',
+          utilities: './src/utilities',
+          hook: './src/hook',
         },
       },
     ],

@@ -16,8 +16,8 @@ import {
   DebugInstructions,
   LearnMoreLinks,
 } from 'react-native/Libraries/NewAppScreen';
-import mobileAds, {MaxAdContentRating} from 'react-native-google-mobile-ads';
-import {PermissionHelper} from 'lib';
+import { useFirstLaunch } from 'hook';
+import { checkLaunchCount, InitAds, loadAsyncStorage } from 'utilities';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -52,26 +52,42 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 export default function HomePage(props: {navigation: any}) {
   const {navigation} = props;
   const isDarkMode = useColorScheme() === 'dark';
+  const isFirstLaunch = useFirstLaunch();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  useEffect(() => {
-    async function checkATTPermission() {
-      await PermissionHelper.checkATTPermission();
-      await mobileAds().setRequestConfiguration({
-        maxAdContentRating: MaxAdContentRating.G,
-        tagForChildDirectedTreatment: false,
-        tagForUnderAgeOfConsent: false,
-      });
-      await mobileAds().initialize();
-      // Initialize the Ads SDK successfully.
-      console.log('Ads SDK initialized successfully.');
-    }
 
-    checkATTPermission();
-  }, []);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', (e) => {
+      // Screen was focused, do something
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', (e) => {
+      // Screen was focused, do something
+      const s = JSON.stringify(e);
+    });
+
+    
+    loadAsyncStorage().then(() => {
+      checkLaunchCount().then((count) => {
+        if (count > 1) {
+          InitAds().then(() => {
+            console.log('Ads initialized from Home Page');
+          });
+        }
+      });
+
+      navigation.navigate('CameraPage');
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <SafeAreaView style={backgroundStyle}>

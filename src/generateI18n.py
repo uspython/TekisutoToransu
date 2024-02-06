@@ -86,25 +86,26 @@ def export_i18n_index_file(pathdir, lans):
         for lan in lans.keys():
             if os.path.isfile("{}/{}.ts".format(pathdir, lan)):
                 available_lans.append(lan)
-        index_js_file.write("import I18n from 'i18n-js';\n")
+        index_js_file.write("import {I18n} from 'i18n-js';\n")
         index_js_file.write(
             "import * as RNLocalize from 'react-native-localize';\n")
         for lan in available_lans:
             index_js_file.write(
                 "import {{ {} }} from './{}';\n".format(lan, lan))
-        index_js_file.write("export * from './keys';\n")
-        index_js_file.write("I18n.fallbacks = true;\n")
-        index_js_file.write("I18n.translations = {\n")
+        index_js_file.write("const i18n = new I18n({\n")
         for lan in available_lans:
             index_js_file.write("  {},\n".format(lan))
         # brazil pt
         index_js_file.write("  br: pt,\n")
 
-        index_js_file.write("};\n")
+        index_js_file.write("});\n")
+        index_js_file.write("i18n.enableFallback = true;\n")
         index_js_file.write(
-            "const [{ languageCode }] = (RNLocalize.getLocales() || [{ languageCode: 'en' }]);\n\n")
-        index_js_file.write("I18n.locale = languageCode;\n")
-        index_js_file.write("export default I18n;\n")
+            "const [{languageCode}] = (RNLocalize.getLocales() || [{languageCode: 'en'}]);\n\n")
+        index_js_file.write("i18n.defaultLocale = 'en';\n")
+        index_js_file.write("i18n.locale = languageCode;\n")
+        index_js_file.write("export * from './keys';\n")
+        index_js_file.write("export default i18n;\n")
 
 
 if __name__ == "__main__":

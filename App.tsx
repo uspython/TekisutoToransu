@@ -5,12 +5,13 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeTabPage from './src/Views/HomeTabPage';
 import CameraPage from './src/Views/CameraPage';
+import {checkLaunchCount, loadAsyncStorage} from 'utilities'
 
 const Stack = createNativeStackNavigator();
 

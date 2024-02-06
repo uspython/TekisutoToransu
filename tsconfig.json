@@ -10,6 +10,8 @@
       "model": ["src/model"],
       "res": ["src/res"],
       "typeRoots": ["src/types"],
+      "utilities": ["src/utilities"],
+      "hook": ["src/hook"]
     }
   },
 }

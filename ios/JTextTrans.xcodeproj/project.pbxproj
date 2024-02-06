@@ -655,7 +655,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.spacerayapp.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.spacerayapp.jtexttrans;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.spacerayapp.jtexttrans;
 				PRODUCT_NAME = JTextTrans;
 				SWIFT_OBJC_BRIDGING_HEADER = "JTextTrans-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -685,7 +686,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.spacerayapp.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.spacerayapp.jtexttrans;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.spacerayapp.jtexttrans;
 				PRODUCT_NAME = JTextTrans;
 				SWIFT_OBJC_BRIDGING_HEADER = "JTextTrans-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
