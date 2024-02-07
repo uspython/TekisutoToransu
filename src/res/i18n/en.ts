@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 export const en = {
-  alert_review_title: `Do you like this game?`,
+  alert_review_title: `Do you like this app?`,
   alert_review_msg: `If you like  {{appname}} ，would you like helping us to leave a review?`,
   alert_permission_deny_title: `Looks like you declined access to your photo library`,
   alert_permission_deny_msg: `To save photos you need to allow it in the settings`,
@@ -55,4 +55,8 @@ export const en = {
   login_subtitle: `Log in then your data will never be lost`,
   wel_title: `Welcome on board`,
   wel_ok: `I understand`,
+  settings: `Settings`,
+  general: `General`,
+  quick_start_camera: `Open Camera Straightly`,
+  quick_start_camera_captain: `Open Camera just after the app launched`,
 };

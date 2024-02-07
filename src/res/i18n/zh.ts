@@ -55,4 +55,8 @@ export const zh = {
   login_subtitle: `保持数据同步`,
   wel_title: `感谢下载`,
   wel_ok: `了解`,
+  settings: `设置`,
+  general: `一般`,
+  quick_start_camera: `快速打开相机`,
+  quick_start_camera_captain: `App启动后立刻打开相机开始扫描`,
 };

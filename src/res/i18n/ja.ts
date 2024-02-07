@@ -32,7 +32,7 @@ export const ja = {
   toast_restore_failure: `購入履歴を復元できませんでした`,
   toast_subscription_success: `サブスクリプションに成功しました`,
   toast_purchase_failure: `購入できませんでした`,
-  shop_premium_detail: ` 無料体験の期間終了後、週間サブスクリプションは{{weekprice}}、月間サブスクリプションは{{monthprice}}、年間サブスクリプションは{{annualprice}}となります。有効期間が終了する24時間前までにアカウント設定でオフにしない限り自動で更新されます。決済はユーザーのiTunesアカウントに請求されます。無料体験版の未使用の部分は購入後に無効となります。`,
+  shop_premium_detail: `無料体験の期間終了後、週間サブスクリプションは{{weekprice}}、月間サブスクリプションは{{monthprice}}、年間サブスクリプションは{{annualprice}}となります。有効期間が終了する24時間前までにアカウント設定でオフにしない限り自動で更新されます。決済はユーザーのiTunesアカウントに請求されます。無料体験版の未使用の部分は購入後に無効となります。`,
   shop_premium_desc: `3日間無料で体験\nその後は{{price}} {{date}} \n自動更新，いつでもキャンセル可`,
   shop_premium_desc_android: `{{price}} {{date}} \n自動更新，いつでもキャンセル可`,
   shop_premium_trial: `体験版でスタート`,

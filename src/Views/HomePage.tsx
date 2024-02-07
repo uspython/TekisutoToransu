@@ -62,32 +62,21 @@ export default function HomePage(props: {navigation: any}) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', (e) => {
       // Screen was focused, do something
+      //navigation.navigate('CameraPage');
     });
 
     return unsubscribe;
   }, [navigation]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', (e) => {
-      // Screen was focused, do something
-      const s = JSON.stringify(e);
-    });
+    async function checkAppInitial() {
+      await loadAsyncStorage();
+      let count = await checkLaunchCount();
+      if(count > 1) {  await InitAds(); }
+    }
 
-    
-    loadAsyncStorage().then(() => {
-      checkLaunchCount().then((count) => {
-        if (count > 1) {
-          InitAds().then(() => {
-            console.log('Ads initialized from Home Page');
-          });
-        }
-      });
-
-      navigation.navigate('CameraPage');
-    });
-
-    return unsubscribe;
-  }, [navigation]);
+    checkAppInitial();
+  }, []);
 
   return (
     <SafeAreaView style={backgroundStyle}>

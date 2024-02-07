@@ -95,8 +95,6 @@ def export_i18n_index_file(pathdir, lans):
         index_js_file.write("const i18n = new I18n({\n")
         for lan in available_lans:
             index_js_file.write("  {},\n".format(lan))
-        # brazil pt
-        index_js_file.write("  br: pt,\n")
 
         index_js_file.write("});\n")
         index_js_file.write("i18n.enableFallback = true;\n")

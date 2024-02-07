@@ -4,6 +4,7 @@ import SettingsPage from './SettingsPage';
 import HomePage from './HomePage';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import type {RouteProp, ParamListBase} from '@react-navigation/native';
+import HistoryPage from './HistoryPage';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,6 +17,8 @@ function tabBarIcon(route: RouteProp<ParamListBase, string>) {
       iconName = focused ? 'crop-free' : 'crop-free';
     } else if (route.name === 'Settings') {
       iconName = focused ? 'manage-accounts' : 'manage-accounts';
+    } else if (route.name === 'History') {
+      iconName = focused? 'history' : 'history';
     }
     //<MaterialIcons name="home" color={color} size={size} />
     // You can return any component that you like here!
@@ -32,6 +35,7 @@ export default function HomeTabPage() {
         tabBarInactiveTintColor: 'gray',
       })}>
       <Tab.Screen name="Home" component={HomePage} />
+      <Tab.Screen name="History" component={HistoryPage} />
       <Tab.Screen name="Settings" component={SettingsPage} />
     </Tab.Navigator>
   );
