@@ -12,6 +12,15 @@ import {
 } from 'react-native';
 import {I18n, SystemColor} from 'res';
 
+const ListHeader = () => {
+  const colorSchema = useColorScheme();
+  return (
+    <View style={styles[colorSchema].header}>
+        <Text style={styles[colorSchema].headerTitle}>{I18n.t('quick_start_camera')}</Text>
+      </View>
+  );
+}
+
 
 const Item = ({item, isFirst, isLast}) => {
   const colorSchema = useColorScheme();
@@ -72,7 +81,7 @@ const SettingsScreen = () => {
       footer: I18n.t('quick_start_camera_captain'),
     },
     {
-      title: ' ',
+      title: null,
       data: [
         {
           key: '1',
@@ -115,6 +124,7 @@ const SettingsScreen = () => {
         stickySectionHeadersEnabled={false}
         sections={sections}
         keyExtractor={item => item.key}
+        ListHeaderComponent={ListHeader}
         renderItem={({item, section, index}) => {
           const isFirst = index === 0;
           const isLast = index === section.data.length - 1;
@@ -158,6 +168,15 @@ const lightStyles = StyleSheet.create({
   listContentContainer: {
     paddingHorizontal: 15, // Creates an inset effect for the entire list
   },
+  header: {
+    height:150,
+    backgroundColor: SystemColor.secondarySystemBackground.light, // Matches the grouped list background color
+  },
+  headerTitle: {
+    color: SystemColor.secondaryLabel.light,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
   sectionHeader: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -170,6 +189,9 @@ const lightStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     paddingHorizontal: 10,
+    paddingTop: 5,
+    paddingBottom: 10,
+    backgroundColor: SystemColor.secondarySystemBackground.light,
   },
   sectionFooterText: {
     fontSize: 12,
@@ -200,7 +222,7 @@ const lightStyles = StyleSheet.create({
     color: SystemColor.label.light,
   },
   sectionSeparator: {
-    height: 20, // Spacing between sections
+    height: 5, // Spacing between sections
   },
   itemSeparator: {
     height: 0.3,
@@ -221,6 +243,14 @@ const darkStyles = StyleSheet.create({
   listContentContainer: {
     paddingHorizontal: 15, // Creates an inset effect for the entire list
   },
+  header: {
+    backgroundColor: SystemColor.secondarySystemBackground.light, // Matches the grouped list background color
+  },
+  headerTitle: {
+    color: SystemColor.secondaryLabel.light,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
   sectionHeader: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -233,6 +263,9 @@ const darkStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     paddingHorizontal: 10,
+    paddingTop: 5,
+    paddingBottom: 10,
+    backgroundColor: SystemColor.secondarySystemBackground.dark,
   },
   sectionFooterText: {
     fontSize: 12,
@@ -263,7 +296,7 @@ const darkStyles = StyleSheet.create({
     color: SystemColor.label.dark,
   },
   sectionSeparator: {
-    height: 20, // Spacing between sections
+    height: 5, // Spacing between sections
   },
   itemSeparator: {
     height: 1,
