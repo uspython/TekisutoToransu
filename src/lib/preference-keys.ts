@@ -75,10 +75,6 @@ export enum PreferenceKey {
    */
   USER_APP_LAUNCH_DAY = 'user.app.launch.day',
 
-  /**
-   *  Shop Modal Showing Count
-   */
-  ALICE_MODAL_SHOW_COUNT = 'alice.modal.show.count',
 
   /**
    * Tracking Alert presented count
@@ -89,6 +85,10 @@ export enum PreferenceKey {
    * Tracking 弹窗是否显示过
    */
   TRACKING_MODAL_HIDDEN = 'tracking.modal.hidden',
+  /**
+   * 是否打开app显示相机 “0”， “1”
+   */
+  QUICK_CAMERA_USED = 'quick.camera.is.used',
 }
 
 export const PreloadPreferencesList = Object.keys(PreferenceKey).map(

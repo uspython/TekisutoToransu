@@ -7,7 +7,7 @@
  * Copyright  © 2019. All rights reserved.
  */
 // TODO: (jeff) import other resource here
-// import colors from './colors';
+import colors from './colors';
 // import strings from './strings';
 // import fonts from './fonts';
 // import images from './images';

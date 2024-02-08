@@ -10,7 +10,10 @@ class SimpleStorage {
   static async load(keys: string[]): Promise<void> {
     await Promise.all(
       keys.map(async key => {
-        await SimpleStorage.getAsync(key);
+        let r = await SimpleStorage.getAsync(key);
+        if (__DEV__) {
+          console.log(`[SimpleStorage] load ${key}: ${r}`);
+        }
       }),
     );
   }

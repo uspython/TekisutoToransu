@@ -1,26 +1,30 @@
 import { useEffect, useState } from "react";
 import { SimpleStorage, PreferenceKey, PermissionHelper } from 'lib';
-import mobileAds, { MaxAdContentRating } from "react-native-google-mobile-ads";
-import { Platform } from "react-native";
-import { InitAds } from "utilities";
 
-export function useFirstLaunch() {
-  const [firstLaunch, setFirstLaunch] = useState(false);
+export function useQuickCamera(): [boolean, (boolean) => Promise<void>] {
+  const [isQuick, setQuick] = useState(false);
+
+  const setQuickCamera = async (isOn: boolean) => {
+    try {
+      await SimpleStorage.save(PreferenceKey.QUICK_CAMERA_USED, isOn ? '1' : '0');
+      setQuick(isOn);
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+
   useEffect(() => {
-    async function getFirstLaunchCount() {
-      const launchCountStr = await SimpleStorage.getAsync(PreferenceKey.APP_LAUNCH_COUNT)
-      const launchCount = launchCountStr ? parseInt(launchCountStr) : 0;
-      setFirstLaunch(launchCount <= 1);
+    async function getQuickCamera() {
+      const usedStr = await SimpleStorage.getAsync(PreferenceKey.QUICK_CAMERA_USED)
+      const isUsed = usedStr ? parseInt(usedStr) : 0;
+      setQuick(isUsed === 1);
     }
 
-    getFirstLaunchCount();
+    getQuickCamera();
   }, []);
-  return firstLaunch;
-}
 
 
-export function useInitAds() {
-  useEffect(() => {
-    InitAds();
-  }, []);
+  return [isQuick, setQuickCamera];
 }
+

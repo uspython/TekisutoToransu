@@ -16,7 +16,7 @@ import {
   useCameraPermission,
 } from 'react-native-vision-camera';
 import {PermissionHelper, PreferenceKey, SimpleStorage} from 'lib';
-import { useFirstLaunch } from 'hook';
+import { useQuickCamera } from 'hook';
 import { InitAds } from 'utilities';
 
 const SavePhoto = async ({photoTag}) => {
@@ -33,7 +33,7 @@ const SavePhoto = async ({photoTag}) => {
 export default function CameraPage(props: {navigation: any}) {
   const {navigation} = props;
 
-  const isFirstLaunch = useFirstLaunch();
+  const isFirstLaunch = useQuickCamera();
   const camera = useRef<Camera>(null);
   const [showGrid, setShowGrid] = useState(false);
 

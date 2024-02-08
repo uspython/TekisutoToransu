@@ -16,8 +16,8 @@ import {
   DebugInstructions,
   LearnMoreLinks,
 } from 'react-native/Libraries/NewAppScreen';
-import { useFirstLaunch } from 'hook';
-import { checkLaunchCount, InitAds, loadAsyncStorage } from 'utilities';
+import {useQuickCamera} from 'hook';
+import {checkLaunchCount, InitAds, loadAsyncStorage} from 'utilities';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -52,17 +52,21 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 export default function HomePage(props: {navigation: any}) {
   const {navigation} = props;
   const isDarkMode = useColorScheme() === 'dark';
-  const isFirstLaunch = useFirstLaunch();
+  const [isQuickCamera] = useQuickCamera();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  useEffect(() => {
+    if (isQuickCamera) {
+      navigation.navigate('CameraPage');
+    }
+  }, [isQuickCamera]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', (e) => {
+    const unsubscribe = navigation.addListener('focus', e => {
       // Screen was focused, do something
-      //navigation.navigate('CameraPage');
     });
 
     return unsubscribe;
@@ -72,7 +76,9 @@ export default function HomePage(props: {navigation: any}) {
     async function checkAppInitial() {
       await loadAsyncStorage();
       let count = await checkLaunchCount();
-      if(count > 1) {  await InitAds(); }
+      if (count > 1) {
+        await InitAds();
+      }
     }
 
     checkAppInitial();
