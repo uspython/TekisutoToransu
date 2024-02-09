@@ -36,7 +36,11 @@ export default function HomeTabPage() {
       })}>
       <Tab.Screen name="Home" component={HomePage} />
       <Tab.Screen name="History" component={HistoryPage} />
-      <Tab.Screen name="Settings" options={{headerShown: true}} component={SettingsPage} />
+      <Tab.Screen
+        name="Settings"
+        options={{headerShown: true}}
+        component={SettingsPage}
+      />
     </Tab.Navigator>
   );
 }

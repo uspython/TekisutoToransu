@@ -1,1 +1,1 @@
-export * from './useHooks';
+export * from './use_hooks';

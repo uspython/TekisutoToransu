@@ -1083,6 +1083,10 @@ PODS:
     - React-debug
   - react-native-aes (2.1.2):
     - React-Core
+  - react-native-blur (4.4.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-cameraroll (7.4.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1272,6 +1276,10 @@ PODS:
     - FirebaseCoreExtension (= 10.20.0)
     - React-Core
     - RNFBApp
+  - RNGestureHandler (2.15.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - RNGoogleMobileAds (12.10.0):
     - glog
     - Google-Mobile-Ads-SDK (= 10.14.0)
@@ -1286,9 +1294,16 @@ PODS:
     - React-Core
   - RNPermissions (4.0.4):
     - React-Core
+  - RNReanimated (3.7.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
   - RNScreens (3.29.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+  - RNStaticSafeAreaInsets (2.2.0):
     - React-Core
   - SocketRocket (0.6.1)
   - UnityAds (4.9.2)
@@ -1362,6 +1377,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-aes (from `../node_modules/react-native-aes-crypto`)
+  - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -1389,12 +1405,15 @@ DEPENDENCIES:
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNGoogleMobileAds (from `../node_modules/react-native-google-mobile-ads`)
   - RNIap (from `../node_modules/react-native-iap`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNStaticSafeAreaInsets (from `../node_modules/react-native-static-safe-area-insets`)
   - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1494,6 +1513,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-aes:
     :path: "../node_modules/react-native-aes-crypto"
+  react-native-blur:
+    :path: "../node_modules/@react-native-community/blur"
   react-native-cameraroll:
     :path: "../node_modules/@react-native-camera-roll/camera-roll"
   react-native-safe-area-context:
@@ -1548,6 +1569,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBCrashlytics:
     :path: "../node_modules/@react-native-firebase/crashlytics"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNGoogleMobileAds:
     :path: "../node_modules/react-native-google-mobile-ads"
   RNIap:
@@ -1558,8 +1581,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-localize"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNStaticSafeAreaInsets:
+    :path: "../node_modules/react-native-static-safe-area-insets"
   VisionCamera:
     :path: "../node_modules/react-native-vision-camera"
   Yoga:
@@ -1627,6 +1654,7 @@ SPEC CHECKSUMS:
   React-logger: 66b168e2b2bee57bd8ce9e69f739d805732a5570
   React-Mapbuffer: 9ee041e1d7be96da6d76a251f92e72b711c651d6
   react-native-aes: b580a7919ae1ba5a1b457e7e4914a87eb01de6f4
+  react-native-blur: 27113acc008facbc8accae5fb3a78b8424f64cfd
   react-native-cameraroll: 3301d62d45616ee9da55ceed04be8d788c3de3ef
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   React-nativeconfig: d753fbbc8cecc8ae413d615599ac378bbf6999bb
@@ -1654,12 +1682,15 @@ SPEC CHECKSUMS:
   RNFBAnalytics: 4d39fee0e5e27ef7a8e4399cde6763bf60d4bbdb
   RNFBApp: 5810d39f89d38272f29d9908cb19ef641922c081
   RNFBCrashlytics: 56e4773cf2d3710dd1e42d2f38d3667589d743f5
+  RNGestureHandler: deda62b8339496ba721a45e0f3e2d7a319932cee
   RNGoogleMobileAds: 1cba1169f0748699cbc2382eb8766bd76943ab75
   RNIap: 123a98c6187f09ce0ed5897569abf01d9db416b0
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNLocalize: 4222a3756cdbe2dc9a5bdf445765a4d2572107cb
   RNPermissions: 757d9a4b5099923c6a410c6bc7c616cd717e9931
+  RNReanimated: 7d6d32f238f914f13d9d6fb45c0aef557f7f901e
   RNScreens: b582cb834dc4133307562e930e8fa914b8c04ef2
+  RNStaticSafeAreaInsets: 055ddbf5e476321720457cdaeec0ff2ba40ec1b8
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   UnityAds: 358547edbd4c923cd03462289b8813d0ef91999e
   VisionCamera: 4b98b273902ac18491bb68481b6601f1f0da0f2d

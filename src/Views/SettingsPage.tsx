@@ -1,3 +1,4 @@
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useQuickCamera} from 'hook';
 import React, {useEffect, useState} from 'react';
 import {
@@ -11,16 +12,18 @@ import {
   useColorScheme,
 } from 'react-native';
 import {I18n, SystemColor} from 'res';
+import {Routes} from './Routes';
 
 const ListHeader = () => {
   const colorSchema = useColorScheme();
   return (
     <View style={styles[colorSchema].header}>
-        <Text style={styles[colorSchema].headerTitle}>{I18n.t('quick_start_camera')}</Text>
-      </View>
+      <Text style={styles[colorSchema].headerTitle}>
+        {I18n.t('quick_start_camera')}
+      </Text>
+    </View>
   );
-}
-
+};
 
 const Item = ({item, isFirst, isLast}) => {
   const colorSchema = useColorScheme();
@@ -58,10 +61,12 @@ const Item = ({item, isFirst, isLast}) => {
   }
 };
 
-const SettingsScreen = () => {
+type Props = NativeStackScreenProps<Routes, 'SettingsPage'>;
+
+const SettingsScreen = (props: Props) => {
+  const {navigation} = props;
   const colorSchema = useColorScheme();
   const [isQuickCamera, setQuickCamera] = useQuickCamera();
-
 
   const settingsData = [
     {
@@ -74,7 +79,7 @@ const SettingsScreen = () => {
           type: 'switch',
           switchOn: false,
           onValueChange: async (result: boolean) => {
-            await setQuickCamera(result)
+            await setQuickCamera(result);
           },
         },
       ],
@@ -104,18 +109,18 @@ const SettingsScreen = () => {
     },
   ];
 
-
   const [sections, setSections] = useState(settingsData);
 
   useEffect(() => {
     const newSections = [...sections];
     newSections[0] = {
-      ...newSections[0], 
+      ...newSections[0],
       data: [{...newSections[0].data[0], switchOn: isQuickCamera}],
     };
 
     // Update the state with the new array
     setSections(newSections);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isQuickCamera]);
 
   return (
@@ -169,7 +174,7 @@ const lightStyles = StyleSheet.create({
     paddingHorizontal: 15, // Creates an inset effect for the entire list
   },
   header: {
-    height:150,
+    height: 150,
     backgroundColor: SystemColor.secondarySystemBackground.light, // Matches the grouped list background color
   },
   headerTitle: {

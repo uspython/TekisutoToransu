@@ -18,6 +18,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import {useQuickCamera} from 'hook';
 import {checkLaunchCount, InitAds, loadAsyncStorage} from 'utilities';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {Routes} from './Routes';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -49,7 +51,9 @@ function Section({children, title}: SectionProps): React.JSX.Element {
   );
 }
 
-export default function HomePage(props: {navigation: any}) {
+type Props = NativeStackScreenProps<Routes, 'HomePage'>;
+
+export default function HomePage(props: Props) {
   const {navigation} = props;
   const isDarkMode = useColorScheme() === 'dark';
   const [isQuickCamera] = useQuickCamera();
