@@ -3,4 +3,7 @@ export type Routes = {
   CameraPage: undefined;
   HomePage: undefined;
   SettingsPage: undefined;
+  MediaPage: {
+    path: string;
+  };
 };

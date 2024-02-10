@@ -14,11 +14,11 @@ function tabBarIcon(route: RouteProp<ParamListBase, string>) {
     let iconName = 'scan';
 
     if (route.name === 'Home') {
-      iconName = focused ? 'crop-free' : 'crop-free';
+      iconName = focused ? 'screenshot' : 'screenshot';
     } else if (route.name === 'Settings') {
       iconName = focused ? 'manage-accounts' : 'manage-accounts';
     } else if (route.name === 'History') {
-      iconName = focused? 'history' : 'history';
+      iconName = focused ? 'history' : 'history';
     }
     //<MaterialIcons name="home" color={color} size={size} />
     // You can return any component that you like here!
@@ -34,7 +34,11 @@ export default function HomeTabPage() {
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
       })}>
-      <Tab.Screen name="Home" component={HomePage} />
+      <Tab.Screen
+        name="Home"
+        component={HomePage}
+        options={{headerTransparent: true}}
+      />
       <Tab.Screen name="History" component={HistoryPage} />
       <Tab.Screen
         name="Settings"
