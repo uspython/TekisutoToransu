@@ -66,15 +66,7 @@ export default function HomePage(props: Props) {
     if (isQuickCamera) {
       navigation.navigate('CameraPage');
     }
-  }, [isQuickCamera]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', e => {
-      // Screen was focused, do something
-    });
-
-    return unsubscribe;
-  }, [navigation]);
+  }, [isQuickCamera, navigation]);
 
   useEffect(() => {
     async function checkAppInitial() {

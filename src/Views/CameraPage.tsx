@@ -14,7 +14,9 @@ import {
 import * as React from 'react';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {
+  Alert,
   GestureResponderEvent,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -27,9 +29,11 @@ import {
   CameraRuntimeError,
   useCameraDevice,
   useCameraFormat,
+  useCameraPermission,
 } from 'react-native-vision-camera';
 import {InitAds} from 'utilities';
 import type {Routes} from './Routes';
+import {I18n, I18nLangKey} from 'res';
 
 const ReanimatedCamera = Reanimated.createAnimatedComponent(Camera);
 
@@ -37,7 +41,11 @@ type Props = NativeStackScreenProps<Routes, 'CameraPage'>;
 export default function CameraPage(props: Props): React.ReactElement {
   const {navigation} = props;
   const camera = useRef<Camera>(null);
+
+  const [isShowCamera, setShowCamera] = useState(false);
   const [isCameraInitialized, setIsCameraInitialized] = useState(false);
+
+  const {hasPermission, requestPermission} = useCameraPermission();
 
   // check if camera page is active
   const isFocussed = useIsFocused();
@@ -50,11 +58,13 @@ export default function CameraPage(props: Props): React.ReactElement {
   // camera device settings
   const device = useCameraDevice('back');
 
-  const screenAspectRatio = SCREEN_HEIGHT / SCREEN_WIDTH;
+  const screenAspectRatio = 4 / 3;
   const format = useCameraFormat(device, [
     {photoAspectRatio: screenAspectRatio},
     {photoResolution: {width: 1024, height: 768}},
   ]);
+  // format.photoHeight = 1024;
+  // format.photoWidth = 768;
 
   const supportsFlash = device?.hasFlash ?? false;
   const canToggleNightMode = device?.supportsLowLightBoost ?? false;
@@ -91,7 +101,7 @@ export default function CameraPage(props: Props): React.ReactElement {
   const takePic = useCallback(async () => {
     const photoFile = await camera.current?.takePhoto({
       qualityPrioritization: 'speed',
-      flash: 'off',
+      flash: flash,
       enableShutterSound: false,
     });
     if (photoFile) {
@@ -102,7 +112,7 @@ export default function CameraPage(props: Props): React.ReactElement {
     } else {
       console.error('No photo taken');
     }
-  }, [navigation]);
+  }, [flash, navigation]);
 
   useEffect(() => {
     const f =
@@ -127,6 +137,46 @@ export default function CameraPage(props: Props): React.ReactElement {
 
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    async function checkCameraPermission() {
+      if (hasPermission) {
+        setShowCamera(true);
+        return;
+      }
+
+      console.log('Requesting camera permission...');
+      const isGranted = await requestPermission();
+      if (isGranted) {
+        setShowCamera(true);
+        return;
+      }
+
+      Alert.alert(
+        I18n.t(I18nLangKey.alert_permission_deny_title),
+        I18n.t(I18nLangKey.alert_permission_deny_msg),
+        [
+          {text: I18n.t(I18nLangKey.alert_btn_cancel)},
+          {
+            text: I18n.t(I18nLangKey.alert_permission_btn_go),
+            onPress: async () => {
+              await Linking.openSettings();
+            },
+          },
+        ],
+      );
+    }
+    // 检查相机权限
+    checkCameraPermission();
+  }, [hasPermission, requestPermission]);
+
+  if (!isShowCamera) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>Pending Permission</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

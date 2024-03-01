@@ -232,3 +232,4 @@ vendor/
 
 ios/JTextTrans/Info.plist
 android/app/src/main/AndroidManifest.xml
+*.numbers
