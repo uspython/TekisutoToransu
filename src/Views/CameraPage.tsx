@@ -1,13 +1,11 @@
 import {useIsFocused} from '@react-navigation/core';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {StatusBarBlurBackground} from 'component';
 import {useIsForeground} from 'hook';
 import {
-  CONTENT_SPACING,
+  CAPTURE_BUTTON_SIZE,
   CONTROL_BUTTON_SIZE,
   PreferenceKey,
   SAFE_AREA_PADDING,
-  SCREEN_HEIGHT,
   SCREEN_WIDTH,
   SimpleStorage,
 } from 'lib';
@@ -23,6 +21,7 @@ import {
   View,
 } from 'react-native';
 import Reanimated from 'react-native-reanimated';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import {
   Camera,
@@ -31,9 +30,9 @@ import {
   useCameraFormat,
   useCameraPermission,
 } from 'react-native-vision-camera';
+import {I18n, I18nLangKey} from 'res';
 import {InitAds} from 'utilities';
 import type {Routes} from './Routes';
-import {I18n, I18nLangKey} from 'res';
 
 const ReanimatedCamera = Reanimated.createAnimatedComponent(Camera);
 
@@ -44,6 +43,7 @@ export default function CameraPage(props: Props): React.ReactElement {
 
   const [isShowCamera, setShowCamera] = useState(false);
   const [isCameraInitialized, setIsCameraInitialized] = useState(false);
+  const [showGrid, setShowGrid] = useState<'off' | 'on'>('on');
 
   const {hasPermission, requestPermission} = useCameraPermission();
 
@@ -81,6 +81,9 @@ export default function CameraPage(props: Props): React.ReactElement {
   const onFlashPressed = useCallback(() => {
     setFlash(f => (f === 'off' ? 'on' : 'off'));
   }, []);
+  const onGridPressed = useCallback(() => {
+    setShowGrid(f => (f === 'off' ? 'on' : 'off'));
+  }, []);
   //#endregion
 
   //#region Tap Gesture
@@ -113,6 +116,33 @@ export default function CameraPage(props: Props): React.ReactElement {
       console.error('No photo taken');
     }
   }, [flash, navigation]);
+
+  const renderGrid = () => {
+    if (showGrid === 'off') {
+      return null;
+    }
+    return (
+      <View style={styles.gridContainer}>
+        {Array.from({length: 2}).map((_, index) => (
+          <React.Fragment key={`line-${index}`}>
+            <View
+              style={[
+                styles.gridLine,
+                {top: `${(index + 1) * 33.33}%`}, // for horizontal lines
+              ]}
+            />
+            <View
+              style={[
+                styles.gridLine,
+                {left: `${(index + 1) * 33.33}%`}, // for vertical lines
+                {height: '100%', width: 1}, // Adjust the dimensions for vertical lines
+              ]}
+            />
+          </React.Fragment>
+        ))}
+      </View>
+    );
+  };
 
   useEffect(() => {
     const f =
@@ -179,76 +209,92 @@ export default function CameraPage(props: Props): React.ReactElement {
   }
 
   return (
-    <View style={styles.container}>
-      {device != null && (
-        <Reanimated.View
-          onTouchEnd={onFocusTap}
-          style={StyleSheet.absoluteFill}>
-          <ReanimatedCamera
-            style={StyleSheet.absoluteFill}
-            device={device}
-            isActive={isActive}
-            ref={camera}
-            onInitialized={onInitialized}
-            onError={onError}
-            onStarted={() => 'Camera started!'}
-            onStopped={() => 'Camera stopped!'}
-            format={format}
-            photoHdr={format?.supportsPhotoHdr}
-            lowLightBoost={device.supportsLowLightBoost && enableNightMode}
-            enableZoomGesture={true}
-            exposure={0}
-            orientation="portrait"
-            photo={true}
-          />
-        </Reanimated.View>
-      )}
-      <TouchableOpacity
-        disabled={!isCameraInitialized}
-        style={styles.captureButton}
-        onPress={takePic}>
-        <Icons name={'radio-button-on'} color="white" size={96} />
-      </TouchableOpacity>
-
-      {/* Bottom Buttons */}
-      <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity
-          style={styles.buttonC}
-          onPress={() => navigation.goBack()}>
-          <Text>Back</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.goBack()}>
-          <Text>Gallery</Text>
-        </TouchableOpacity>
-      </View>
-
-      <StatusBarBlurBackground />
-
-      <View style={styles.rightButtonRow}>
-        {supportsFlash && (
-          <TouchableOpacity style={styles.buttonC} onPress={onFlashPressed}>
-            <Icons
-              name={flash === 'on' ? 'flash-on' : 'flash-off'}
-              color="white"
-              size={24}
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        {device != null && (
+          <Reanimated.View
+            onTouchEnd={onFocusTap}
+            style={styles.containerCamera}>
+            <ReanimatedCamera
+              style={StyleSheet.absoluteFill}
+              device={device}
+              isActive={isActive}
+              ref={camera}
+              onInitialized={onInitialized}
+              onError={onError}
+              onStarted={() => 'Camera started!'}
+              onStopped={() => 'Camera stopped!'}
+              format={format}
+              photoHdr={format?.supportsPhotoHdr}
+              lowLightBoost={device.supportsLowLightBoost && enableNightMode}
+              enableZoomGesture={true}
+              exposure={0}
+              orientation="portrait"
+              photo={true}
             />
-          </TouchableOpacity>
+            {renderGrid()}
+          </Reanimated.View>
         )}
-        {canToggleNightMode && (
+        {/* Bottom Buttons */}
+        <View style={styles.bottomButtonContainer}>
           <TouchableOpacity
-            style={styles.buttonC}
-            onPress={() => setEnableNightMode(!enableNightMode)}>
+            style={styles.buttonRound}
+            onPress={() => navigation.goBack()}>
+            <Icons name={'close'} color="white" size={22} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={!isCameraInitialized}
+            style={styles.captureButton}
+            onPress={takePic}>
             <Icons
-              name={enableNightMode ? 'mode-night' : 'sun'}
+              name={'radio-button-on'}
+              color="white"
+              size={CAPTURE_BUTTON_SIZE}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.goBack()}>
+            <Icons name={'image'} color="white" size={44} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.leftButtonRow}>
+          <TouchableOpacity style={styles.buttonRight} onPress={onGridPressed}>
+            <Icons
+              name={showGrid === 'on' ? 'grid-on' : 'grid-off'}
               color="white"
               size={24}
             />
           </TouchableOpacity>
-        )}
+        </View>
+
+        <View style={styles.rightButtonRow}>
+          {supportsFlash && (
+            <TouchableOpacity
+              style={styles.buttonRight}
+              onPress={onFlashPressed}>
+              <Icons
+                name={flash === 'on' ? 'flash-on' : 'flash-off'}
+                color="white"
+                size={24}
+              />
+            </TouchableOpacity>
+          )}
+          {canToggleNightMode && (
+            <TouchableOpacity
+              style={styles.buttonRight}
+              onPress={() => setEnableNightMode(!enableNightMode)}>
+              <Icons
+                name={enableNightMode ? 'mode-night' : 'sunny'}
+                color="white"
+                size={24}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -257,19 +303,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
   },
-  captureButton: {
-    position: 'absolute',
-    alignSelf: 'center',
-    bottom: SAFE_AREA_PADDING.paddingBottom,
+  containerCamera: {
+    width: SCREEN_WIDTH,
+    height: Math.round((SCREEN_WIDTH * 4) / 3),
   },
-  button: {
-    marginBottom: CONTENT_SPACING,
-    width: CONTROL_BUTTON_SIZE,
-    height: CONTROL_BUTTON_SIZE,
-    borderRadius: CONTROL_BUTTON_SIZE / 2,
-    backgroundColor: 'rgba(140, 140, 140, 0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
+  leftButtonRow: {
+    position: 'absolute',
+    left: SAFE_AREA_PADDING.paddingLeft,
+    top: SAFE_AREA_PADDING.paddingTop,
   },
   rightButtonRow: {
     position: 'absolute',
@@ -291,7 +332,7 @@ const styles = StyleSheet.create({
   bottomButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     paddingHorizontal: 10,
     paddingBottom: 10,
     position: 'absolute',
@@ -299,10 +340,37 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 15,
   },
-  buttonC: {
-    padding: 10,
-    backgroundColor: 'red',
-    borderRadius: 5,
+  captureButton: {
+    width: CAPTURE_BUTTON_SIZE,
+    height: CAPTURE_BUTTON_SIZE,
+  },
+  buttonRound: {
+    width: CONTROL_BUTTON_SIZE,
+    height: CONTROL_BUTTON_SIZE,
+    borderRadius: CONTROL_BUTTON_SIZE, // Adjust this value to increase or decrease the roundness of the border
+    borderWidth: 1, // Optional: if you want a border, you can specify its width here
+    borderColor: '#fff', // Optional: this will be the color of the border if borderWidth is set
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonRight: {
+    width: CONTROL_BUTTON_SIZE,
+    height: CONTROL_BUTTON_SIZE,
+    borderRadius: CONTROL_BUTTON_SIZE, // Adjust this value to increase or decrease the roundness of the border
+    borderWidth: 1, // Optional: if you want a border, you can specify its width here
+    borderColor: '#fff', // Optional: this will be the color of the border if borderWidth is set
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  button: {
+    width: CONTROL_BUTTON_SIZE,
+    height: CONTROL_BUTTON_SIZE,
+    borderRadius: CONTROL_BUTTON_SIZE / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   gridContainer: {
     position: 'absolute',
@@ -315,7 +383,7 @@ const styles = StyleSheet.create({
   gridLine: {
     position: 'absolute',
     borderColor: 'white',
-    borderWidth: 1,
+    borderWidth: 0.3,
     width: '100%',
   },
 });

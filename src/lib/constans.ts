@@ -29,4 +29,4 @@ export const SCREEN_HEIGHT = Platform.select<number>({
 export const CAPTURE_BUTTON_SIZE = 78;
 
 // Control Button like Flash
-export const CONTROL_BUTTON_SIZE = 40;
+export const CONTROL_BUTTON_SIZE = 44;
