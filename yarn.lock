@@ -1186,6 +1186,11 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
+"@bam.tech/react-native-image-resizer@^3.0.7":
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/@bam.tech/react-native-image-resizer/-/react-native-image-resizer-3.0.7.tgz#4e762399af7ba4eea4136d85b51b4eb49b699564"
+  integrity sha512-TRYfjuaEOQjrGkj9736kW5A3xgyuVD5B2HlhPHvgVn0nM4zjPDLbjTqjId15hQCBNK6Udapcgvfb8lWlwcr7Gw==
+
 "@bcoe/v8-coverage@^0.2.3":
   version "0.2.3"
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
@@ -5982,6 +5987,11 @@ react-native-iap@^12.12.2:
   integrity sha512-H2x3CppTi8WUkPV3k5S+XtgdRpIzycPtXe7JhmmIcjurZ4+R4QlKDt3WqmCCi1MycI0hQU7Z4197jb5GepI7Hg==
   dependencies:
     "@expo/config-plugins" "^6.0.1"
+
+react-native-image-crop-picker@^0.40.3:
+  version "0.40.3"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.40.3.tgz#a6b135cd1218a33ad126c1a148ec5a1bd01737ff"
+  integrity sha512-45PKcTnsnLS+E36YwoXutllQdRSOuOsMN0IRcAcwsFXOuAQIOtugXlAuGGL28JHKb/ATaSSPvqCSrdG65Jv3GA==
 
 react-native-keychain@^8.1.2:
   version "8.1.2"
