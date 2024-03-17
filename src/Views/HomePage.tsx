@@ -8,7 +8,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import React, {type PropsWithChildren, useEffect} from 'react';
+import React, {type PropsWithChildren, useEffect, useCallback} from 'react';
 import {
   Colors,
   Header,
@@ -62,6 +62,12 @@ export default function HomePage(props: Props) {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const showCamera = useCallback(() => {
+    requestAnimationFrame(() => {
+      navigation.navigate('CameraPage');
+    });
+  }, [navigation]);
+
   useEffect(() => {
     if (isQuickCamera) {
       navigation.navigate('CameraPage');
@@ -95,12 +101,7 @@ export default function HomePage(props: Props) {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Section title="Step One">
-            <Button
-              title="Go to CameraPage"
-              onPress={() => {
-                navigation.navigate('CameraPage');
-              }}
-            />
+            <Button title="Go to CameraPage" onPress={showCamera} />
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
             screen and then come back to see your edits.
           </Section>
