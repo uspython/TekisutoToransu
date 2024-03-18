@@ -13,6 +13,7 @@ import HomeTabPage from './src/Views/HomeTabPage';
 import CameraPage from './src/Views/CameraPage';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import MediaPage from './src/Views/MediaPage';
+import BrowserPage from './src/Views/BrowserPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,16 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="MediaPage"
               component={MediaPage}
+              options={{
+                headerShown: false,
+                presentation: 'fullScreenModal',
+                animation: 'fade',
+                animationDuration: 200,
+              }}
+            />
+            <Stack.Screen
+              name="BrowserPage"
+              component={BrowserPage}
               options={{
                 headerShown: false,
                 presentation: 'fullScreenModal',

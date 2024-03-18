@@ -102,19 +102,24 @@ export default function CameraPage(props: Props): React.ReactElement {
   //#endregion
 
   const takePic = useCallback(async () => {
-    const photoFile = await camera.current?.takePhoto({
-      qualityPrioritization: 'speed',
-      flash: flash,
-      enableShutterSound: false,
-    });
-    if (photoFile) {
-      //await SavePhoto({photoTag: `${photoFile.path}`});
-      navigation.push('MediaPage', {
-        path: photoFile.path,
+    requestAnimationFrame(async () => {
+      const photoFile = await camera.current?.takePhoto({
+        qualityPrioritization: 'speed',
+        flash: flash,
+        enableShutterSound: false,
       });
-    } else {
-      console.error('No photo taken');
-    }
+      if (photoFile) {
+        //await SavePhoto({photoTag: `${photoFile.path}`});
+        // navigation.push('MediaPage', {
+        //   imagePath: photoFile.path,
+        // });
+        navigation.push('BrowserPage', {
+          imagePath: photoFile.path,
+        });
+      } else {
+        console.error('No photo taken');
+      }
+    });
   }, [flash, navigation]);
 
   const renderGrid = () => {

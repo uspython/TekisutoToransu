@@ -1,70 +1,118 @@
-import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, Alert, useEffect } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import { WebView } from 'react-native-webview';
-import { useNavigation } from '@react-navigation/native';
+import {WebView} from 'react-native-webview';
+import {useNavigation} from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'; // Assuming you're using Ionicons
-import { Routes } from './Routes';
+import {Routes} from './Routes';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type Props = NativeStackScreenProps<Routes, 'BrowserPage'>;
-const BrowserPage: React.FC<Props> = ({ imagePath, ocrText }) => {
+const BrowserPage: React.FC<Props> = props => {
+  const {route} = props;
+  const {params} = route;
+  const {imagePath} = params;
+  const ocrText = 'hello world';
+
   const navigation = useNavigation();
+
+  const [resizedImage, setResizedImage] = useState(imagePath);
+  const [isShowImageHud, setShowImageHud] = useState(false);
 
   const handleBackPress = () => {
     requestAnimationFrame(() => {
       navigation.goBack();
-    })
+    });
   };
 
   const handleCopy = () => {
     // Implement functionality to copy ocrText to clipboard
-    Alert.alert("Copy", "Text copied to clipboard.");
+    Alert.alert('Copy', 'Text copied to clipboard.');
   };
 
   const handleShare = () => {
     // Implement share functionality
-    Alert.alert("Share", "Share dialog opened.");
+    Alert.alert('Share', 'Share dialog opened.');
   };
 
   const handleRerecognize = () => {
     // Implement re-recognize functionality
-    Alert.alert("Re-recognize", "OCR re-recognition triggered.");
+    Alert.alert('Re-recognize', 'OCR re-recognition triggered.');
   };
 
   useEffect(() => {
-    async function resizeImage() {
+    async function handleResizeImage() {
+      try {
+        setShowImageHud(true);
+        const response = await ImageResizer.createResizedImage(
+          imagePath,
+          1280,
+          1280,
+          'JPEG',
+          70,
+          90,
+          null,
+          false,
+          {mode: 'contain', onlyScaleDown: true},
+        );
 
+        setResizedImage(response.path);
+        setShowImageHud(false);
+      } catch (error) {
+        setShowImageHud(false);
+        console.log(error);
+      }
     }
-  }, [])
+
+    handleResizeImage();
+  }, [imagePath]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{flex: 1}}>
       <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-        <Icon name="arrow-back" size={24} />
+        <Icons name="arrow-back" size={24} />
       </TouchableOpacity>
 
-      <Image source={{ uri: imagePath }} style={styles.image} resizeMode="contain" />
+      <View style={styles.imageContainer}>
+        {isShowImageHud ? (
+          <View style={styles.hudContainer}>
+            <ActivityIndicator size="small" color="#0000ff" />
+          </View>
+        ) : (
+          <Image
+            source={{uri: 'file://' + resizedImage}}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        )}
+      </View>
 
       <WebView
         originWhitelist={['*']}
-        source={{ html: `<p>${ocrText}</p>` }}
+        source={{html: `<p>${ocrText}</p>`}}
         style={styles.webView}
       />
 
       <View style={styles.toolbar}>
         <TouchableOpacity onPress={handleCopy}>
-          <Icon name="copy-outline" size={24} />
+          <Icons name="copy-outline" size={24} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleShare}>
-          <Icon name="share-social-outline" size={24} />
+          <Icons name="share-social-outline" size={24} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleRerecognize}>
-          <Icon name="refresh-outline" size={24} />
+          <Icons name="refresh-outline" size={24} />
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -74,10 +122,23 @@ const styles = StyleSheet.create({
     top: 10,
     left: 10,
     zIndex: 10,
+    width: 44,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageContainer: {
+    width: '100%',
+    height: '50%',
+  },
+  hudContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'clear',
   },
   image: {
-    width: '100%',
-    height: '50%', // Adjust according to your layout needs
+    flex: 1,
   },
   webView: {
     flex: 1,

@@ -21,7 +21,7 @@ type Props = NativeStackScreenProps<Routes, 'MediaPage'>;
 const MediaPage = (prop: Props) => {
   const {route, navigation} = prop;
   const isDarkMode = useColorScheme() === 'dark';
-  console.log('MediaPage is mounted ' + JSON.stringify(route.params.path));
+  console.log('MediaPage is mounted ' + JSON.stringify(route.params.imagePath));
 
   return (
     // eslint-disable-next-line react-native/no-inline-styles
