@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet, Alert, useEffect } from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'; // Assuming you're using Ionicons
 import { Routes } from './Routes';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 
 
 type Props = NativeStackScreenProps<Routes, 'BrowserPage'>;
@@ -12,7 +13,9 @@ const BrowserPage: React.FC<Props> = ({ imagePath, ocrText }) => {
   const navigation = useNavigation();
 
   const handleBackPress = () => {
-    navigation.goBack();
+    requestAnimationFrame(() => {
+      navigation.goBack();
+    })
   };
 
   const handleCopy = () => {
@@ -29,6 +32,12 @@ const BrowserPage: React.FC<Props> = ({ imagePath, ocrText }) => {
     // Implement re-recognize functionality
     Alert.alert("Re-recognize", "OCR re-recognition triggered.");
   };
+
+  useEffect(() => {
+    async function resizeImage() {
+
+    }
+  }, [])
 
   return (
     <View style={{ flex: 1 }}>
