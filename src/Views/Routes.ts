@@ -4,9 +4,9 @@ export type Routes = {
   HomePage: undefined;
   SettingsPage: undefined;
   MediaPage: {
-    path: string;
+    imagePath: string;
   };
   BrowserPage:{
-    path: string;
+    imagePath: string;
   };
 };

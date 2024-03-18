@@ -1,15 +1,14 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'; // Assuming you're using Ionicons
+import { Routes } from './Routes';
 
-interface BrowserPageProps {
-  imagePath: string;
-  ocrText: string; // This prop is expected to be the text obtained from the OCR service
-}
 
-const BrowserPage: React.FC<BrowserPageProps> = ({ imagePath, ocrText }) => {
+type Props = NativeStackScreenProps<Routes, 'BrowserPage'>;
+const BrowserPage: React.FC<Props> = ({ imagePath, ocrText }) => {
   const navigation = useNavigation();
 
   const handleBackPress = () => {
