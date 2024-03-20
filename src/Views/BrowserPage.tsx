@@ -6,14 +6,15 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {WebView} from 'react-native-webview';
 import {useNavigation} from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'; // Assuming you're using Ionicons
 import {Routes} from './Routes';
-import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {handleApiRequest, handleResizeImage} from 'utilities';
 
 type Props = NativeStackScreenProps<Routes, 'BrowserPage'>;
 const BrowserPage: React.FC<Props> = props => {
@@ -49,30 +50,30 @@ const BrowserPage: React.FC<Props> = props => {
   };
 
   useEffect(() => {
-    async function handleResizeImage() {
-      try {
-        setShowImageHud(true);
-        const response = await ImageResizer.createResizedImage(
-          imagePath,
-          1280,
-          1280,
-          'JPEG',
-          70,
-          90,
-          null,
-          false,
-          {mode: 'contain', onlyScaleDown: true},
-        );
+    async function handleImageProcess() {
+      setShowImageHud(true);
 
-        setResizedImage(response.path);
-        setShowImageHud(false);
+      let resizedImagePath = null;
+      try {
+        resizedImagePath = await handleResizeImage(imagePath);
+        setResizedImage(resizedImagePath);
       } catch (error) {
         setShowImageHud(false);
         console.log(error);
       }
+
+      if (resizedImagePath) {
+        try {
+          await handleApiRequest(resizedImagePath);
+        } catch (error) {
+          setShowImageHud(false);
+          console.log(error);
+        }
+      }
+      setShowImageHud(false);
     }
 
-    handleResizeImage();
+    handleImageProcess();
   }, [imagePath]);
 
   return (
@@ -82,17 +83,16 @@ const BrowserPage: React.FC<Props> = props => {
       </TouchableOpacity>
 
       <View style={styles.imageContainer}>
+        <Image
+          source={{uri: 'file://' + resizedImage}}
+          style={styles.image}
+          resizeMode="contain"
+        />
         {isShowImageHud ? (
           <View style={styles.hudContainer}>
             <ActivityIndicator size="small" color="#0000ff" />
           </View>
-        ) : (
-          <Image
-            source={{uri: 'file://' + resizedImage}}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        )}
+        ) : null}
       </View>
 
       <WebView
@@ -103,13 +103,16 @@ const BrowserPage: React.FC<Props> = props => {
 
       <View style={styles.toolbar}>
         <TouchableOpacity onPress={handleCopy}>
-          <Icons name="copy-outline" size={24} />
+          <Icons name="content-copy" size={24} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleShare}>
-          <Icons name="share-social-outline" size={24} />
+          <Icons
+            name={Platform.OS === 'ios' ? 'ios-share' : 'share'}
+            size={24}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleRerecognize}>
-          <Icons name="refresh-outline" size={24} />
+          <Icons name="restart-alt" size={24} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -132,10 +135,15 @@ const styles = StyleSheet.create({
     height: '50%',
   },
   hudContainer: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'clear',
+    zIndex: 10,
   },
   image: {
     flex: 1,

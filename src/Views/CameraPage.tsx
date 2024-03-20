@@ -19,7 +19,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Pressable,
 } from 'react-native';
 import Reanimated from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';

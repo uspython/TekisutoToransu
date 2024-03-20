@@ -6,7 +6,7 @@ export type Routes = {
   MediaPage: {
     imagePath: string;
   };
-  BrowserPage:{
+  BrowserPage: {
     imagePath: string;
   };
 };
