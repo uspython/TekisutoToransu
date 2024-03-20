@@ -19,6 +19,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Pressable,
 } from 'react-native';
 import Reanimated from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -61,10 +62,10 @@ export default function CameraPage(props: Props): React.ReactElement {
   const screenAspectRatio = 4 / 3;
   const format = useCameraFormat(device, [
     {photoAspectRatio: screenAspectRatio},
-    {photoResolution: {width: 1024, height: 768}},
+    {photoResolution: {width: 1280, height: 960}},
   ]);
-  // format.photoHeight = 1024;
-  // format.photoWidth = 768;
+
+  // const format = useCameraFormat(device, Templates.PhotoPortrait);
 
   const supportsFlash = device?.hasFlash ?? false;
   const canToggleNightMode = device?.supportsLowLightBoost ?? false;
@@ -222,6 +223,7 @@ export default function CameraPage(props: Props): React.ReactElement {
             style={styles.containerCamera}>
             <ReanimatedCamera
               style={StyleSheet.absoluteFill}
+              orientation="portrait"
               device={device}
               isActive={isActive}
               ref={camera}
@@ -234,7 +236,6 @@ export default function CameraPage(props: Props): React.ReactElement {
               lowLightBoost={device.supportsLowLightBoost && enableNightMode}
               enableZoomGesture={true}
               exposure={0}
-              orientation="portrait"
               photo={true}
             />
             {renderGrid()}
@@ -250,7 +251,7 @@ export default function CameraPage(props: Props): React.ReactElement {
           <TouchableOpacity
             disabled={!isCameraInitialized}
             style={styles.captureButton}
-            onPress={takePic}>
+            onPressIn={takePic}>
             <Icons
               name={'radio-button-on'}
               color="white"
