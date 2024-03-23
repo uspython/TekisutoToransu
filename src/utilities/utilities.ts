@@ -3,10 +3,21 @@ import {
   PreferenceKey,
   PreloadPreferencesList,
   SimpleStorage,
+  uploadPhotoToAzureBlobStorage,
 } from 'lib';
 import {Platform} from 'react-native';
-import mobileAds, {MaxAdContentRating} from 'react-native-google-mobile-ads';
+import mobileAds, {
+  MaxAdConten,
+  MaxAdContentRating,
+  Rating,
+} from 'react-native-google-mobile-ads';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
+import {
+  SAS_TOKEN,
+  BLOB_ACCOUNT_NAME,
+  BLOB_CONTAINER_NAME,
+  BLOB_VERSION_CODE,
+} from '@env';
 
 export async function InitAds() {
   console.log('InitAds');
@@ -69,9 +80,12 @@ export async function handleResizeImage(imagePath: string) {
 
 export async function handleApiRequest(path: string) {
   console.log('handleApiRequest', path);
-  await new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(path);
-    }, 3000);
+  // upload to azure blob storage
+  await uploadPhotoToAzureBlobStorage({
+    photoUri: path,
+    accountName: BLOB_ACCOUNT_NAME,
+    containerName: BLOB_CONTAINER_NAME,
+    sasToken: SAS_TOKEN,
+    versionCode: BLOB_VERSION_CODE,
   });
 }
