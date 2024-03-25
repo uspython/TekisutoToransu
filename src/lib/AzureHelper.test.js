@@ -1,4 +1,4 @@
-import {uploadPhotoToAzureBlobStorage} from './AzureUploader';
+import {uploadPhotoToAzureBlobStorage} from './AzureHelper';
 import Upload from 'react-native-background-upload';
 
 describe('uploadPhoto', () => {

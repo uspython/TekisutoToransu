@@ -18,6 +18,7 @@ import {
   BLOB_CONTAINER_NAME,
   BLOB_VERSION_CODE,
 } from '@env';
+import {OCRResponse} from 'model';
 
 export async function InitAds() {
   console.log('InitAds');
