@@ -43,20 +43,10 @@ export const uploadPhotoToAzureBlobStorage = async ({
 
     const uploadId = await Upload.startUpload(options);
     console.log(`[AzureUploader] Upload started with ID: ${uploadId}`);
-
-    Upload.addListener('progress', uploadId, data => {
-      console.log(`[AzureUploader] Progress: ${data.progress}%`);
-    });
-
-    Upload.addListener('error', uploadId, data => {
-      console.error(`[AzureUploader] Error: ${JSON.stringify(data)}`);
-    });
-
-    Upload.addListener('completed', uploadId, data => {
-      console.log('AzureUploader] Upload completed!' + data);
-    });
+    return [uploadId, uploadUrl];
   } catch (error) {
     console.error('[AzureUploader] Upload failed', error);
+    throw error;
   }
 };
 

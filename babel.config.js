@@ -37,6 +37,7 @@ module.exports = function (api) {
             lib: './src/lib',
             utilities: './src/utilities',
             hook: './src/hook',
+            'rtn-platform-helper': './third_party/rtn-platform-helper',
           },
         },
       ],

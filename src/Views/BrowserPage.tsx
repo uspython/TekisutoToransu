@@ -36,7 +36,7 @@ const BrowserPage: React.FC<Props> = props => {
 
   const handleCopy = () => {
     // Implement functionality to copy ocrText to clipboard
-    Alert.alert('Copy', 'Text copied to clipboard.');
+    Alert.alert('Copy', 'Text copied to clipboard.' + MSSubscriptionKey);
   };
 
   const handleShare = () => {

@@ -11,7 +11,8 @@
       "res": ["src/res"],
       "typeRoots": ["src/types"],
       "utilities": ["src/utilities"],
-      "hook": ["src/hook"]
+      "hook": ["src/hook"],
+      "rtn-platform-helper": ["third_party/rtn-platform-helper"],
     }
   },
 }

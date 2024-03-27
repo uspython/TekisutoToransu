@@ -3,6 +3,7 @@ import {
   PreferenceKey,
   PreloadPreferencesList,
   SimpleStorage,
+  analyzeImageWithAzureOCR,
   uploadPhotoToAzureBlobStorage,
 } from 'lib';
 import {Platform} from 'react-native';
@@ -19,6 +20,8 @@ import {
   BLOB_VERSION_CODE,
 } from '@env';
 import {OCRResponse} from 'model';
+import RtnPlatformHelper from 'rtn-platform-helper';
+import Upload from 'react-native-background-upload';
 
 export async function InitAds() {
   console.log('InitAds');
@@ -80,13 +83,29 @@ export async function handleResizeImage(imagePath: string) {
 }
 
 export async function handleApiRequest(path: string) {
+  const {MSSubscriptionKey} = RtnPlatformHelper.getConstants();
   console.log('handleApiRequest', path);
   // upload to azure blob storage
-  await uploadPhotoToAzureBlobStorage({
+  const [uploadId, uploadUrl] = await uploadPhotoToAzureBlobStorage({
     photoUri: path,
     accountName: BLOB_ACCOUNT_NAME,
     containerName: BLOB_CONTAINER_NAME,
     sasToken: SAS_TOKEN,
     versionCode: BLOB_VERSION_CODE,
   });
+
+  Upload.addListener('progress', uploadId, data => {
+    console.log(`[AzureUploader] Progress: ${data.progress}%`);
+  });
+
+  Upload.addListener('error', uploadId, data => {
+    console.error(`[AzureUploader] Error: ${JSON.stringify(data)}`);
+  });
+
+  Upload.addListener('completed', uploadId, async data => {
+    console.log('AzureUploader] Upload completed!' + data);
+    await analyzeImageWithAzureOCR(uploadUrl, )
+  });
+
+  
 }
