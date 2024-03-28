@@ -15,6 +15,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons'; // Assuming you're 
 import {Routes} from './Routes';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {handleApiRequest, handleResizeImage} from 'utilities';
+import RtnPlatformHelper from 'rtn-platform-helper';
 
 type Props = NativeStackScreenProps<Routes, 'BrowserPage'>;
 const BrowserPage: React.FC<Props> = props => {
@@ -22,6 +23,7 @@ const BrowserPage: React.FC<Props> = props => {
   const {params} = route;
   const {imagePath} = params;
   const ocrText = 'hello world';
+  const {MSSubscriptionKey} = RtnPlatformHelper.getConstants();
 
   const navigation = useNavigation();
 

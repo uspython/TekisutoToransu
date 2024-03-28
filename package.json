@@ -42,8 +42,7 @@
     "react-native-static-safe-area-insets": "^2.2.0",
     "react-native-vector-icons": "^10.0.3",
     "react-native-vision-camera": "^3.8.2",
-    "react-native-webview": "^13.8.1",
-    "rtn-platform-helper": "../rtn-platform-helper"
+    "react-native-webview": "^13.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
