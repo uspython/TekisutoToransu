@@ -233,3 +233,4 @@ vendor/
 ios/JTextTrans/Info.plist
 android/app/src/main/AndroidManifest.xml
 *.numbers
+third_party/rtn-platform-helper/android/src/main/java/com/rtnplatformhelper/RtnPlatformHelperModule.java
