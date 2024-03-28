@@ -54,7 +54,7 @@ export async function analyzeImageWithAzureOCR(
   imageUrl: string,
   endpoint: string,
   apiKey: string,
-  features?: string[],
+  features: string[] = ['read'],
   language: string = 'ja',
   modelVersion: string = 'latest',
   smartCropsAspectRatios?: number[],

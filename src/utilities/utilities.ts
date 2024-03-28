@@ -13,12 +13,6 @@ import mobileAds, {
   Rating,
 } from 'react-native-google-mobile-ads';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import {
-  SAS_TOKEN,
-  BLOB_ACCOUNT_NAME,
-  BLOB_CONTAINER_NAME,
-  BLOB_VERSION_CODE,
-} from '@env';
 import {OCRResponse} from 'model';
 import RtnPlatformHelper from 'rtn-platform-helper';
 import Upload from 'react-native-background-upload';
@@ -83,7 +77,14 @@ export async function handleResizeImage(imagePath: string) {
 }
 
 export async function handleApiRequest(path: string) {
-  const {MSSubscriptionKey} = RtnPlatformHelper.getConstants();
+  const {
+    MSSubscriptionKey,
+    MSEndPoint,
+    BLOB_ACCOUNT_NAME,
+    BLOB_CONTAINER_NAME,
+    SAS_TOKEN,
+    BLOB_VERSION_CODE
+  } = RtnPlatformHelper.getConstants();
   console.log('handleApiRequest', path);
   // upload to azure blob storage
   const [uploadId, uploadUrl] = await uploadPhotoToAzureBlobStorage({
@@ -104,8 +105,13 @@ export async function handleApiRequest(path: string) {
 
   Upload.addListener('completed', uploadId, async data => {
     console.log('AzureUploader] Upload completed!' + data);
-    await analyzeImageWithAzureOCR(uploadUrl, )
-  });
+    console.log(uploadUrl);
+    const resp = await analyzeImageWithAzureOCR(
+      uploadUrl,
+      MSEndPoint,
+      MSSubscriptionKey,
+    );
 
-  
+    console.log(JSON.stringify(resp));
+  });
 }
