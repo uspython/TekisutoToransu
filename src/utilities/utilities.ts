@@ -76,16 +76,17 @@ export async function handleResizeImage(imagePath: string) {
   return resizeResp.path;
 }
 
-export async function handleApiRequest(path: string) {
+export async function handleApiRequest(path: string): Promise<OCRResponse> {
   const {
     MSSubscriptionKey,
     MSEndPoint,
     BLOB_ACCOUNT_NAME,
     BLOB_CONTAINER_NAME,
     SAS_TOKEN,
-    BLOB_VERSION_CODE
+    BLOB_VERSION_CODE,
   } = RtnPlatformHelper.getConstants();
   console.log('handleApiRequest', path);
+
   // upload to azure blob storage
   const [uploadId, uploadUrl] = await uploadPhotoToAzureBlobStorage({
     photoUri: path,
@@ -95,23 +96,69 @@ export async function handleApiRequest(path: string) {
     versionCode: BLOB_VERSION_CODE,
   });
 
-  Upload.addListener('progress', uploadId, data => {
-    console.log(`[AzureUploader] Progress: ${data.progress}%`);
+  // Wrap the upload listener in a Promise
+  const uploadResult = new Promise<OCRResponse>((resolve, reject) => {
+    // Adjust `OCRResponse` as needed
+    Upload.addListener('progress', uploadId, data => {
+      console.log(`[AzureUploader] Progress: ${data.progress}%`);
+    });
+
+    Upload.addListener('error', uploadId, data => {
+      console.error(`[AzureUploader] Error: ${JSON.stringify(data)}`);
+      reject(data);
+    });
+
+    Upload.addListener('completed', uploadId, async data => {
+      console.log('[AzureUploader] Upload completed!', data);
+      console.log(uploadUrl);
+
+      try {
+        const resp = await analyzeImageWithAzureOCR(
+          uploadUrl,
+          MSEndPoint,
+          MSSubscriptionKey,
+        );
+        console.log(JSON.stringify(resp));
+        resolve(resp); // Resolve the promise with the OCR analysis result
+      } catch (error) {
+        reject(error); // Reject the promise if OCR analysis fails
+      }
+    });
   });
 
-  Upload.addListener('error', uploadId, data => {
-    console.error(`[AzureUploader] Error: ${JSON.stringify(data)}`);
-  });
+  return uploadResult; // Return the promise
+}
 
-  Upload.addListener('completed', uploadId, async data => {
-    console.log('AzureUploader] Upload completed!' + data);
-    console.log(uploadUrl);
-    const resp = await analyzeImageWithAzureOCR(
-      uploadUrl,
-      MSEndPoint,
-      MSSubscriptionKey,
-    );
+export function handleOcrResult(ocrResult: OCRResponse): {
+  text: string;
+  wordsArray: string[];
+} {
+  // Just return the first text
+  // let texts = [];
+  // for (let i = 0; i < ocrResult.readResult.blocks.length; i++) {
+  //   const block = ocrResult.readResult.blocks[i];
+  //   for (let j = 0; j < block.lines.length; j++) {
+  //     const line = block.lines[j];
+  //     texts.push(line.text);
+  //   }
+  // }
 
-    console.log(JSON.stringify(resp));
-  });
+  // return all words
+  let wordsArray: string[] = [];
+  let retText = '';
+
+  for (const block of ocrResult.readResult.blocks) {
+    for (const line of block.lines) {
+      for (const word of line.words) {
+        // Only return words with high confidence
+        if (word.confidence > 0.7) {
+          const {text} = word;
+          wordsArray.push(text);
+          retText += text;
+        }
+      }
+    }
+  }
+
+  return {text: retText, wordsArray};
 }
