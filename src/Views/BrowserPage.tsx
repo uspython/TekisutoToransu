@@ -14,7 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import Icons from 'react-native-vector-icons/MaterialIcons'; // Assuming you're using Ionicons
 import {Routes} from './Routes';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {handleApiRequest, handleResizeImage} from 'utilities';
+import {handleApiRequest, handleOcrResult, handleResizeImage} from 'utilities';
 import RtnPlatformHelper from 'rtn-platform-helper';
 
 type Props = NativeStackScreenProps<Routes, 'BrowserPage'>;
@@ -22,13 +22,15 @@ const BrowserPage: React.FC<Props> = props => {
   const {route} = props;
   const {params} = route;
   const {imagePath} = params;
-  const ocrText = 'hello world';
   const {MSSubscriptionKey} = RtnPlatformHelper.getConstants();
 
   const navigation = useNavigation();
 
   const [resizedImage, setResizedImage] = useState(imagePath);
   const [isShowImageHud, setShowImageHud] = useState(false);
+  const [ocrText, setOcrText] = useState('');
+
+  const webViewRef = React.useRef<WebView>(null);
 
   const handleBackPress = () => {
     requestAnimationFrame(() => {
@@ -66,7 +68,9 @@ const BrowserPage: React.FC<Props> = props => {
 
       if (resizedImagePath) {
         try {
-          await handleApiRequest(resizedImagePath);
+          const resp = await handleApiRequest(resizedImagePath);
+          const {text, wordsArray} = handleOcrResult(resp);
+          setOcrText(text);
         } catch (error) {
           setShowImageHud(false);
           console.log(error);
@@ -77,6 +81,18 @@ const BrowserPage: React.FC<Props> = props => {
 
     handleImageProcess();
   }, [imagePath]);
+
+  useEffect(() => {
+    const script = `
+      document.body.style.backgroundColor = 'lightblue'; // Example styling
+      document.body.innerHTML = '<p>${ocrText}</p>'; // Display the text
+      true; // Note: It's important to return true or some value here to avoid warnings in Android.
+    `;
+
+    if (webViewRef.current) {
+      webViewRef.current.injectJavaScript(script);
+    }
+  }, [ocrText]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -99,7 +115,8 @@ const BrowserPage: React.FC<Props> = props => {
 
       <WebView
         originWhitelist={['*']}
-        source={{html: `<p>${ocrText}</p>`}}
+        ref={webViewRef}
+        source={{html: '<html><body></body></html>'}}
         style={styles.webView}
       />
 
