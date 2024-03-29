@@ -5955,10 +5955,9 @@ react-native-aes-crypto@^3.0.1:
   resolved "https://registry.npmjs.org/react-native-aes-crypto/-/react-native-aes-crypto-3.0.1.tgz"
   integrity sha512-51L++eKz13cPeIqg/9Slp1aWIsYOiHzK1jJ9AjcmmtDi3jqtRqdh0y2yJqDI31iBgkQVMz3FjN9zfQ1alj7QBQ==
 
-react-native-background-upload@^6.6.0:
+"react-native-background-upload@https://github.com/uspython/react-native-background-upload#fix_android_gradle":
   version "6.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-background-upload/-/react-native-background-upload-6.6.0.tgz#7c081f4260d16e7a416522c3622b81938ad799c8"
-  integrity sha512-adfOJmeO3GmPmc53cdHYWp5eTGKagk/AhkraSoQ89BHRwBWrtRQ29NN9sm2CLezBYrSQWg0W47C8TaowtYZ1LQ==
+  resolved "https://github.com/uspython/react-native-background-upload#630b465f796cb8b26689840bd4784529e4657321"
 
 react-native-device-info@^10.12.0:
   version "10.12.0"

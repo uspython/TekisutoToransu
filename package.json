@@ -26,7 +26,7 @@
     "react": "18.2.0",
     "react-native": "0.73.2",
     "react-native-aes-crypto": "^3.0.1",
-    "react-native-background-upload": "^6.6.0",
+    "react-native-background-upload": "https://github.com/uspython/react-native-background-upload#fix_android_gradle",
     "react-native-device-info": "^10.12.0",
     "react-native-dotenv": "^3.4.9",
     "react-native-gesture-handler": "^2.15.0",
