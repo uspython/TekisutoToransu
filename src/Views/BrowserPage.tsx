@@ -21,7 +21,7 @@ type Props = NativeStackScreenProps<Routes, 'BrowserPage'>;
 const BrowserPage: React.FC<Props> = props => {
   const {route} = props;
   const {params} = route;
-  const {imagePath} = params;
+  const {imagePath, isRotationNeeded } = params;
   const {MSSubscriptionKey} = RtnPlatformHelper.getConstants();
 
   const navigation = useNavigation();
@@ -48,7 +48,7 @@ const BrowserPage: React.FC<Props> = props => {
     Alert.alert('Share', 'Share dialog opened.');
   };
 
-  const handleRerecognize = () => {
+  const handleRecognize = () => {
     // Implement re-recognize functionality
     Alert.alert('Re-recognize', 'OCR re-recognition triggered.');
   };
@@ -59,7 +59,7 @@ const BrowserPage: React.FC<Props> = props => {
 
       let resizedImagePath = null;
       try {
-        resizedImagePath = await handleResizeImage(imagePath);
+        resizedImagePath = await handleResizeImage(imagePath, isRotationNeeded);
         setResizedImage(resizedImagePath);
       } catch (error) {
         setShowImageHud(false);
@@ -80,7 +80,7 @@ const BrowserPage: React.FC<Props> = props => {
     }
 
     handleImageProcess();
-  }, [imagePath]);
+  }, [imagePath, isRotationNeeded]);
 
   useEffect(() => {
     const script = `
@@ -130,7 +130,7 @@ const BrowserPage: React.FC<Props> = props => {
             size={24}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleRerecognize}>
+        <TouchableOpacity onPress={handleRecognize}>
           <Icons name="restart-alt" size={24} />
         </TouchableOpacity>
       </View>

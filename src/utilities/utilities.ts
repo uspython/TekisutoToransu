@@ -60,14 +60,17 @@ export async function loadAsyncStorage() {
   await SimpleStorage.load(PreloadPreferencesList);
 }
 
-export async function handleResizeImage(imagePath: string) {
+export async function handleResizeImage(
+  imagePath: string,
+  isRotationNeeded: boolean = true,
+) {
   const resizeResp = await ImageResizer.createResizedImage(
     imagePath,
     1280,
     1280,
     'JPEG',
     70,
-    90,
+    isRotationNeeded ? 90 : 0,
     null,
     false,
     {mode: 'contain', onlyScaleDown: true},

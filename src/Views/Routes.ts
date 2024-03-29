@@ -8,5 +8,6 @@ export type Routes = {
   };
   BrowserPage: {
     imagePath: string;
+    isRotationNeeded: boolean;
   };
 };

@@ -33,6 +33,7 @@ import {
 import {I18n, I18nLangKey} from 'res';
 import {InitAds} from 'utilities';
 import type {Routes} from './Routes';
+import ImagePicker, {ImageOrVideo} from 'react-native-image-crop-picker';
 
 const ReanimatedCamera = Reanimated.createAnimatedComponent(Camera);
 
@@ -115,12 +116,38 @@ export default function CameraPage(props: Props): React.ReactElement {
         // });
         navigation.push('BrowserPage', {
           imagePath: photoFile.path,
+          isRotationNeeded: true,
         });
       } else {
         console.error('No photo taken');
       }
     });
   }, [flash, navigation]);
+
+  const handleChoosePhoto = useCallback(async () => {
+    requestAnimationFrame(async () => {
+      try {
+        const result: ImageOrVideo = await ImagePicker.openPicker({
+          width: 960,
+          height: 1280,
+          cropping: true,
+          freeStyleCropEnabled: true,
+          includeBase64: false,
+          includeExif: false,
+          forceJpg: true,
+        });
+        console.log('[ImagePicker]: ' + JSON.stringify(result));
+        if (result.path) {
+          navigation.push('BrowserPage', {
+            imagePath: result.path,
+            isRotationNeeded: false,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }, [navigation]);
 
   const renderGrid = () => {
     if (showGrid === 'off') {
@@ -257,9 +284,7 @@ export default function CameraPage(props: Props): React.ReactElement {
               size={CAPTURE_BUTTON_SIZE}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.goBack()}>
+          <TouchableOpacity style={styles.button} onPress={handleChoosePhoto}>
             <Icons name={'image'} color="white" size={44} />
           </TouchableOpacity>
         </View>
