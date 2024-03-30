@@ -7,12 +7,14 @@ import {
   Switch,
   StyleSheet,
   SectionList,
-  TouchableOpacity,
   SafeAreaView,
   useColorScheme,
+  Linking,
 } from 'react-native';
 import {I18n, SystemColor} from 'res';
 import {Routes} from './Routes';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 
 const ListHeader = () => {
   const colorSchema = useColorScheme();
@@ -51,10 +53,21 @@ const Item = ({item, isFirst, isLast}) => {
       );
     case 'textDetail':
       return (
-        <View style={itemStyle}>
+        <TouchableOpacity style={itemStyle}>
           <Text style={styles[colorSchema].itemTitle}>{item.title}</Text>
           <Text style={styles[colorSchema].itemDetail}>{item.detail}</Text>
-        </View>
+        </TouchableOpacity>
+      );
+    case 'textArrow':
+      return (
+        <TouchableOpacity style={itemStyle} onPress={item.onPress}>
+          <Text style={styles[colorSchema].itemTitle}>{item.title}</Text>
+          <Icons
+            name="keyboard-arrow-right"
+            size={20}
+            color={SystemColor.tertiaryLabel.light}
+          />
+        </TouchableOpacity>
       );
     default:
       return <View />;
@@ -102,8 +115,36 @@ const SettingsScreen = (props: Props) => {
     {
       title: 'Privacy',
       data: [
-        {key: '7', title: 'Terms', type: 'text', detail: 'Enabled'},
-        {key: '8', title: 'Privacy', type: 'switch', switchOn: true},
+        {
+          key: '7',
+          title: 'Terms',
+          type: 'textArrow',
+          detail: 'Enabled',
+          onPress: async () => {
+            try {
+              await Linking.openURL(
+                'https://sites.google.com/view/jtexttrans/Term-of-Service',
+              );
+            } catch (error) {
+              console.error('An error occurred', error);
+            }
+          },
+        },
+        {
+          key: '8',
+          title: 'Privacy',
+          type: 'textArrow',
+          detail: 'Enabled',
+          onPress: async () => {
+            try {
+              await Linking.openURL(
+                'https://sites.google.com/view/jtexttrans/Privacy-Policy',
+              );
+            } catch (error) {
+              console.error('An error occurred', error);
+            }
+          },
+        },
       ],
       footer: null,
     },
@@ -129,7 +170,7 @@ const SettingsScreen = (props: Props) => {
         stickySectionHeadersEnabled={false}
         sections={sections}
         keyExtractor={item => item.key}
-        ListHeaderComponent={ListHeader}
+        // ListHeaderComponent={ListHeader}
         renderItem={({item, section, index}) => {
           const isFirst = index === 0;
           const isLast = index === section.data.length - 1;
@@ -169,6 +210,7 @@ const lightStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: SystemColor.secondarySystemBackground.light, // Matches the grouped list background color
+    paddingTop: 20,
   },
   listContentContainer: {
     paddingHorizontal: 15, // Creates an inset effect for the entire list
