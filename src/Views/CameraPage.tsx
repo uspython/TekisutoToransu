@@ -30,7 +30,7 @@ import {
   useCameraFormat,
   useCameraPermission,
 } from 'react-native-vision-camera';
-import {I18n, I18nLangKey} from 'res';
+import {I18n, I18nLangKey, SystemColor} from 'res';
 import {InitAds} from 'utilities';
 import type {Routes} from './Routes';
 import ImagePicker, {ImageOrVideo} from 'react-native-image-crop-picker';

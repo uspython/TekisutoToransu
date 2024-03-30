@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -7,6 +7,8 @@ import {
   Alert,
   ActivityIndicator,
   Platform,
+  ToastAndroid,
+  Share,
 } from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {WebView} from 'react-native-webview';
@@ -16,6 +18,8 @@ import {Routes} from './Routes';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {handleApiRequest, handleOcrResult, handleResizeImage} from 'utilities';
 import RtnPlatformHelper from 'rtn-platform-helper';
+import {SystemColor} from 'res';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 type Props = NativeStackScreenProps<Routes, 'BrowserPage'>;
 const BrowserPage: React.FC<Props> = props => {
@@ -38,54 +42,100 @@ const BrowserPage: React.FC<Props> = props => {
     });
   };
 
+  const handleClosePress = () => {
+    requestAnimationFrame(() => {
+      navigation.navigate('Home');
+    });
+  };
+
   const handleCopy = () => {
     // Implement functionality to copy ocrText to clipboard
-    Alert.alert('Copy', 'Text copied to clipboard.' + MSSubscriptionKey);
+    if (ocrText.length === 0) {
+      ToastAndroid.showWithGravity(
+        'No text to copy',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+      return;
+    }
+
+    Clipboard.setString(ocrText);
+    ToastAndroid.showWithGravity(
+      'Copied to clipboard',
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     // Implement share functionality
-    Alert.alert('Share', 'Share dialog opened.');
+    if (ocrText.length === 0) {
+      // No text to share
+      ToastAndroid.showWithGravity(
+        'No text to share',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+      return;
+    }
+
+    try {
+      const result = await Share.share({
+        message: ocrText,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+        ToastAndroid.showWithGravity(
+          'Dismissed',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      }
+    } catch (error: any) {
+      console.error(error);
+    }
   };
 
-  const handleRecognize = () => {
-    // Implement re-recognize functionality
-    Alert.alert('Re-recognize', 'OCR re-recognition triggered.');
-  };
+  const handleImageProcess = useCallback(async () => {
+    setOcrText('');
+    setShowImageHud(true);
 
-  useEffect(() => {
-    async function handleImageProcess() {
-      setShowImageHud(true);
+    let resizedImagePath = null;
+    try {
+      resizedImagePath = await handleResizeImage(imagePath, isRotationNeeded);
+      setResizedImage(resizedImagePath);
+    } catch (error) {
+      setShowImageHud(false);
+      console.log(error);
+    }
 
-      let resizedImagePath = null;
+    if (resizedImagePath) {
       try {
-        resizedImagePath = await handleResizeImage(imagePath, isRotationNeeded);
-        setResizedImage(resizedImagePath);
+        const resp = await handleApiRequest(resizedImagePath);
+        const {text, wordsArray} = handleOcrResult(resp);
+        setOcrText(text);
       } catch (error) {
         setShowImageHud(false);
         console.log(error);
       }
-
-      if (resizedImagePath) {
-        try {
-          const resp = await handleApiRequest(resizedImagePath);
-          const {text, wordsArray} = handleOcrResult(resp);
-          setOcrText(text);
-        } catch (error) {
-          setShowImageHud(false);
-          console.log(error);
-        }
-      }
-      setShowImageHud(false);
     }
-
-    handleImageProcess();
+    setShowImageHud(false);
   }, [imagePath, isRotationNeeded]);
 
   useEffect(() => {
+    handleImageProcess();
+  }, [handleImageProcess]);
+
+  useEffect(() => {
     const script = `
-      document.body.style.backgroundColor = 'lightblue'; // Example styling
-      document.body.innerHTML = '<p>${ocrText}</p>'; // Display the text
+      document.body.style.backgroundColor = 'beige'; // Example styling
+      document.body.innerHTML = '<p style="color: #000; padding-top: 40px;font-size: 40;">${ocrText}</p>'; // Display the text with larger font size
       true; // Note: It's important to return true or some value here to avoid warnings in Android.
     `;
 
@@ -99,6 +149,9 @@ const BrowserPage: React.FC<Props> = props => {
       <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
         <Icons name="arrow-back" size={24} />
       </TouchableOpacity>
+      <TouchableOpacity style={styles.closeButton} onPress={handleClosePress}>
+        <Icons name="done" size={24} />
+      </TouchableOpacity>
 
       <View style={styles.imageContainer}>
         <Image
@@ -108,7 +161,10 @@ const BrowserPage: React.FC<Props> = props => {
         />
         {isShowImageHud ? (
           <View style={styles.hudContainer}>
-            <ActivityIndicator size="small" color="#0000ff" />
+            <ActivityIndicator
+              size="large"
+              color={`${SystemColor.pink.light}`}
+            />
           </View>
         ) : null}
       </View>
@@ -130,7 +186,7 @@ const BrowserPage: React.FC<Props> = props => {
             size={24}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleRecognize}>
+        <TouchableOpacity onPress={handleImageProcess}>
           <Icons name="restart-alt" size={24} />
         </TouchableOpacity>
       </View>
@@ -141,13 +197,43 @@ const BrowserPage: React.FC<Props> = props => {
 const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
-    top: 10,
-    left: 10,
+    top: 20,
+    left: 15,
     zIndex: 10,
     width: 44,
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: SystemColor.tertiarySystemBackground.light,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 3,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 15,
+    zIndex: 10,
+    width: 44,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: SystemColor.tertiarySystemBackground.light,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 3,
   },
   imageContainer: {
     width: '100%',
