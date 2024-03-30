@@ -26,7 +26,7 @@ const ListHeader = () => {
 };
 
 const Item = ({item, isFirst, isLast}) => {
-  const colorSchema = useColorScheme();
+  const colorSchema = 'light'; //useColorScheme();
   // Determine the item style based on its position or if it's the only item in the section
   const itemStyle = [
     styles[colorSchema].itemContainer,
@@ -85,20 +85,20 @@ const SettingsScreen = (props: Props) => {
       ],
       footer: I18n.t('quick_start_camera_captain'),
     },
-    {
-      title: null,
-      data: [
-        {
-          key: '1',
-          title: I18n.t('quick_start_camera'),
-          type: 'text',
-          detail: 'John Doe',
-        },
-        {key: '2', title: 'Airplane Mode', type: 'switch', switchOn: false},
-        {key: '3', title: 'Wi-Fi', type: 'textDetail', detail: 'Not Connected'},
-      ],
-      footer: null,
-    },
+    // {
+    //   title: null,
+    //   data: [
+    //     {
+    //       key: '1',
+    //       title: I18n.t('quick_start_camera'),
+    //       type: 'text',
+    //       detail: 'John Doe',
+    //     },
+    //     {key: '2', title: 'Airplane Mode', type: 'switch', switchOn: false},
+    //     {key: '3', title: 'Wi-Fi', type: 'textDetail', detail: 'Not Connected'},
+    //   ],
+    //   footer: null,
+    // },
     {
       title: 'Privacy',
       data: [

@@ -1,5 +1,5 @@
 import {
-  Button,
+  Dimensions,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -9,48 +9,21 @@ import {
   View,
 } from 'react-native';
 import React, {type PropsWithChildren, useEffect, useCallback} from 'react';
-import {
-  Colors,
-  Header,
-  ReloadInstructions,
-  DebugInstructions,
-  LearnMoreLinks,
-} from 'react-native/Libraries/NewAppScreen';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 import {useQuickCamera} from 'hook';
 import {checkLaunchCount, InitAds, loadAsyncStorage} from 'utilities';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Routes} from './Routes';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {SystemColor} from 'res';
+import type {ImageOrVideo} from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
+const screenWidth = Dimensions.get('window').width;
 type Props = NativeStackScreenProps<Routes, 'HomePage'>;
 
 export default function HomePage(props: Props) {
@@ -58,13 +31,34 @@ export default function HomePage(props: Props) {
   const isDarkMode = useColorScheme() === 'dark';
   const [isQuickCamera] = useQuickCamera();
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   const showCamera = useCallback(() => {
     requestAnimationFrame(() => {
       navigation.navigate('CameraPage');
+    });
+  }, [navigation]);
+
+  const handleChoosePhoto = useCallback(async () => {
+    requestAnimationFrame(async () => {
+      try {
+        const result: ImageOrVideo = await ImagePicker.openPicker({
+          width: 960,
+          height: 1280,
+          cropping: true,
+          freeStyleCropEnabled: true,
+          includeBase64: false,
+          includeExif: false,
+          forceJpg: true,
+        });
+        console.log('[ImagePicker]: ' + JSON.stringify(result));
+        if (result.path) {
+          navigation.push('BrowserPage', {
+            imagePath: result.path,
+            isRotationNeeded: false,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
     });
   }, [navigation]);
 
@@ -87,55 +81,68 @@ export default function HomePage(props: Props) {
   }, []);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            <Button title="Go to CameraPage" onPress={showCamera} />
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={[styles.button, styles.insetGrouped]}
+          onPress={showCamera}>
+          <Icons
+            name="photo-camera"
+            size={100}
+            color={`${SystemColor.secondaryLabel.light}`}
+          />
+          <Text style={styles.buttonText}>Camera</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.insetGrouped]}
+          onPress={handleChoosePhoto}>
+          <Icons
+            name="photo-library"
+            size={100}
+            color={`${SystemColor.secondaryLabel.light}`}
+          />
+          <Text style={styles.buttonText}>Camera Roll</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  safeArea: {
+    flex: 1,
+    justifyContent: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  container: {
+    flex: 1,
+    marginHorizontal: 20,
+    marginVertical: 20,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    marginBottom: 10,
+    backgroundColor: '#EFEFF4',
+    borderRadius: 10,
+    width: screenWidth - 40, // Subtracting the horizontal paddings
   },
-  highlight: {
-    fontWeight: '700',
+  insetGrouped: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
+  buttonText: {
+    marginLeft: 20,
+    fontSize: 20,
+    fontWeight: '500',
+    color: SystemColor.secondaryLabel.light,
   },
 });
